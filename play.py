@@ -54,7 +54,7 @@ if __name__ == "__main__":
         state, reward, done = env.step(action)
         total_reward += reward
         timeStep += 1
-        print(f"step:{timeStep} reward:{reward}")
+        print(f"step:{timeStep} reward:{reward} q:{q_vals}")
         if done:
             break
 
