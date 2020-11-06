@@ -47,8 +47,6 @@ if __name__ == "__main__":
 
     while True:
         start_ts = time.time()
-        # if args.vis:
-        #     env.render()
         state_v = torch.tensor(np.array([state], copy=False))
         q_vals = net(state_v).data.numpy()[0]
         action = np.argmax(q_vals)
