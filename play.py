@@ -34,7 +34,7 @@ if __name__ == "__main__":
                         action='store_false')
     args = parser.parse_args()
 
-    env = grid(size=[SIZE_X, SIZE_Y], renderingThreshold=44)
+    env = grid(size=[SIZE_X, SIZE_Y])
 
     net = DQN(INPUT_SHAPE ,ACTION_SHAPE)
     state = torch.load(args.model, map_location=lambda stg, _: stg)
@@ -43,19 +43,24 @@ if __name__ == "__main__":
     state = env.reset()
     total_reward = 0.0
     c = collections.Counter()
+    timeStep = 0
 
     while True:
         start_ts = time.time()
-        if args.vis:
-            env.render()
+        # if args.vis:
+        #     env.render()
         state_v = torch.tensor(np.array([state], copy=False))
         q_vals = net(state_v).data.numpy()[0]
         action = np.argmax(q_vals)
         c[action] += 1
         state, reward, done = env.step(action)
         total_reward += reward
+        timeStep += 1
+        print(f"step:{timeStep} reward:{reward}")
         if done:
             break
+
+    env.render()
 
     print(f"Game finished after {time.time() - start_ts}[sec]")
     print(f"Total reward: {total_reward}")
