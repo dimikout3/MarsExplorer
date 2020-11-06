@@ -15,8 +15,8 @@ import collections
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
 FPS = 25
 
-SIZE_X = 7
-SIZE_Y = 7
+SIZE_X = 10
+SIZE_Y = 10
 INPUT_CHANNELS = 1
 INPUT_SHAPE = (INPUT_CHANNELS, SIZE_X, SIZE_Y)
 ACTION_SHAPE = 4
@@ -56,8 +56,6 @@ if __name__ == "__main__":
         total_reward += reward
         if done:
             break
-
-    env.render(path=args.record)
 
     print(f"Game finished after {time.time() - start_ts}[sec]")
     print(f"Total reward: {total_reward}")
