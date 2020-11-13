@@ -15,7 +15,8 @@ if __name__ == "__main__":
     # print(f"W={args.width} H={args.height} N={args.number}")
     gen = Generator(number_rows=3, number_columns=3,
                     noise=[0.04,0.04],
-                    margins=[0.2, 0.2])
+                    margins=[0.25, 0.25],
+                    obstacle_size=[0.1, 0.1])
 
     plt.imshow(gen.get_map())
     plt.show()

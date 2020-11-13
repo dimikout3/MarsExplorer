@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 class Generator:
 
     def __init__(self, size=[30, 30], obstacles=10, number_rows=None,
-                 number_columns=None, noise=[0, 0], margins=[0.15, 0.15]):
+                 number_columns=None, noise=[0, 0], margins=[0.15, 0.15],
+                 obstacle_size=[0.0, 0.0]):
 
         # obstacles --> number of obstacles in the map
         # margins --> left,right,top,bottom margins as percentages that are free
@@ -38,6 +39,17 @@ class Generator:
         np.clip(hv, 0, height-1, out=hv)
         wv += np.random.randint(w_btm, w_top, size = wv.shape[0])
         np.clip(wv, 0, width-1, out=wv)
+
+        # determine obstacle size (random towards height and width axis)
+        for obstacle in range(hv.shape[0]):
+            # BUG:  check if width*obstacle_size[1]>1
+            ob_width = np.random.randint(1, width*obstacle_size[1])
+            ob_height = np.random.randint(1, height*obstacle_size[0])
+
+            hv = np.concatenate((hv, np.repeat(hv[obstacle], ob_height)))
+            wv = np.concatenate((wv, np.arange(wv[obstacle], wv[obstacle]+ob_height)))
+            wv = np.concatenate((wv, np.repeat(wv[obstacle], ob_width)))
+            hv = np.concatenate((hv, np.arange(hv[obstacle], hv[obstacle]+ob_width)))
 
         # apply to map
         self.map[hv, wv] = 1
