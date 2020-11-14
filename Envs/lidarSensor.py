@@ -13,7 +13,7 @@ class Lidar:
         self.threshold = np.sqrt(2*0.5**2)
 
 
-    def scan(self, map, position, resolution=200):
+    def scan(self, map, position, resolution=200, dtype=np.int):
         # position --> (height, width) of sensor position (robots)
         # map --> ground truth, with FULL visibility
         p1 = np.array(position)
@@ -21,8 +21,8 @@ class Lidar:
         p2 = np.stack((p1[0]+self.maxRange*np.cos(self.thetas),
                        p1[1]+self.maxRange*np.sin(self.thetas)),axis=1)
 
-        rX = np.linspace(p1[0], p2[:,0], resolution, dtype=np.int)
-        rY = np.linspace(p1[1], p2[:,1], resolution, dtype=np.int)
+        rX = np.linspace(p1[0], p2[:,0], resolution, dtype=dtype)
+        rY = np.linspace(p1[1], p2[:,1], resolution, dtype=dtype)
 
         rays = np.stack((rX, rY), axis=2)
         # XXX: consider using np.unique(rays, axis=0?) to avoid repetition
