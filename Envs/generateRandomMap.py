@@ -13,7 +13,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # print(f"W={args.width} H={args.height} N={args.number}")
-    gen = Generator(number_rows=3, number_columns=3,
+    gen = Generator(size=[30,30],
+                    number_rows=3, number_columns=3,
                     noise=[0.04,0.04],
                     margins=[0.25, 0.25],
                     obstacle_size=[0.1, 0.1])
