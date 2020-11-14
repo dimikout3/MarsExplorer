@@ -39,7 +39,7 @@ if __name__ == "__main__":
             plt.plot([y,ego_position[1]], [x, ego_position[0]],
                      c='r', linewidth=1, alpha=0.6)
 
-
         plt.imshow(map)
-        plt.show()
+        # plt.show()
+        plt.savefig(f"step_{step}.png")
         plt.close()
