@@ -4,6 +4,7 @@ import argparse
 from randomMapGenerator import Generator
 from lidarSensor import Lidar
 
+STEPS = 10
 
 if __name__ == "__main__":
 
@@ -13,8 +14,6 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--number", help="Number of obstacles")
     args = parser.parse_args()
 
-    ego_position = np.array([10,10])
-
     # print(f"W={args.width} H={args.height} N={args.number}")
     gen = Generator(size=[30,30],
                     number_rows=3, number_columns=3,
@@ -23,19 +22,24 @@ if __name__ == "__main__":
                     obstacle_size=[0.1, 0.1])
 
     ldr = Lidar(r=6, channels=32)
-    map = gen.get_map()
 
-    thetas, ranges = ldr.scan(map, ego_position)
+    for step in range(STEPS):
 
-    xObs = (ego_position[0]+ranges*np.cos(thetas)).astype(float)
-    yObs = (ego_position[1]+ranges*np.sin(thetas)).astype(float)
-    plt.scatter(yObs, xObs, c='r', alpha=0.6)
+        ego_position = np.array([10,10+step])
 
-    for x,y in zip(xObs, yObs):
-        plt.plot([y,ego_position[1]], [x, ego_position[0]],
-                 c='r', linewidth=1, alpha=0.6)
+        map = gen.get_map()
+
+        thetas, ranges = ldr.scan(map, ego_position)
+
+        xObs = (ego_position[0]+ranges*np.cos(thetas)).astype(float)
+        yObs = (ego_position[1]+ranges*np.sin(thetas)).astype(float)
+        plt.scatter(yObs, xObs, c='r', alpha=0.6)
+
+        for x,y in zip(xObs, yObs):
+            plt.plot([y,ego_position[1]], [x, ego_position[0]],
+                     c='r', linewidth=1, alpha=0.6)
 
 
-    plt.imshow(map)
-    plt.show()
-    plt.close()
+        plt.imshow(map)
+        plt.show()
+        plt.close()
