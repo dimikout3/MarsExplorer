@@ -21,8 +21,12 @@ class Lidar:
         p2 = np.stack((p1[0]+self.maxRange*np.cos(self.thetas),
                        p1[1]+self.maxRange*np.sin(self.thetas)),axis=1)
 
-        rX = np.linspace(p1[0], p2[:,0], resolution, dtype=dtype)
-        rY = np.linspace(p1[1], p2[:,1], resolution, dtype=dtype)
+        # rX = np.linspace(p1[0], p2[:,0], resolution, dtype=dtype)
+        # rY = np.linspace(p1[1], p2[:,1], resolution, dtype=dtype)
+        rX = np.linspace(p1[0], p2[:,0], resolution)
+        rY = np.linspace(p1[1], p2[:,1], resolution)
+        rX = np.round(rX).astype(dtype)
+        rY = np.round(rY).astype(dtype)
 
         rays = np.stack((rX, rY), axis=2)
         # XXX: consider using np.unique(rays, axis=0?) to avoid repetition
