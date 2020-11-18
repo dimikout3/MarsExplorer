@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-
 class DQN(nn.Module):
     def __init__(self, input_shape, n_actions):
         super(DQN, self).__init__()
@@ -28,6 +27,23 @@ class DQN(nn.Module):
     def forward(self, x):
         conv_out = self.conv(x.float()).view(x.size()[0], -1)
         return self.fc(conv_out)
+
+class DQN_simple(nn.Module):
+
+
+    def __init__(self, input_shape, n_actions, h_size = 64):
+        super(DQN_simple, self).__init__()
+
+        self.fc = nn.Sequential(
+            nn.Linear(input_shape[0], h_size),
+            nn.ReLU(),
+            nn.Linear(h_size, h_size),
+            nn.ReLU(),
+            nn.Linear(h_size, n_actions)
+        )
+
+    def forward(self, x):
+        return self.fc(x.float())
 
 
 class DQN_ORIGINAL(nn.Module):
