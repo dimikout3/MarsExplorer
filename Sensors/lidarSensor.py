@@ -31,7 +31,7 @@ class Lidar:
         rays = np.stack((rX, rY), axis=2)
         # XXX: consider using np.unique(rays, axis=0?) to avoid repetition
 
-        ranges = np.repeat(self.maxRange, self.channels)
+        self.ranges = np.repeat(self.maxRange, self.channels)
 
         for channel in range(self.channels):
 
@@ -43,6 +43,32 @@ class Lidar:
             if obstacles_idx.size>0:
                 p1_repeated = np.tile(p1, (obstacles_idx.size,1))
                 distances = np.linalg.norm( p1_repeated - rays_channel[obstacles_idx], axis=1)
-                ranges[channel] = np.min(distances)
+                self.ranges[channel] = np.min(distances)
 
-        return self.thetas, ranges
+        return self.thetas, self.ranges
+
+
+    def ranges_to_idx(self, position, resolution=200):
+
+        """ Providing a list of indexes, which are visible, givens the lidar
+            sensors """
+
+        p1 = position
+
+        # We extend the ranges, otherwise cells with obstacles will not be
+        # visible
+        extended_r = self.ranges + .5
+        extended_r = np.clip(extended_r, 0., self.maxRange)
+
+        p2 = np.stack((p1[0]+extended_r*np.cos(self.thetas),
+                       p1[1]+extended_r*np.sin(self.thetas)),axis=1)
+
+        rX = np.linspace(p1[0], p2[:,0], resolution)
+        rY = np.linspace(p1[1], p2[:,1], resolution)
+        rX = np.round(rX).astype(np.int)
+        rY = np.round(rY).astype(np.int)
+
+        idx = np.stack((rX, rY), axis=2)
+        self.idx = np.reshape(idx, (resolution*self.channels, 2))
+
+        return self.idx
