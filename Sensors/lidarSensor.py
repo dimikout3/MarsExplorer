@@ -31,9 +31,6 @@ class Lidar:
         rays = np.stack((rX, rY), axis=2)
         # XXX: consider using np.unique(rays, axis=0?) to avoid repetition
 
-        hv, wv = np.where(map>0.5)
-        p3 =np.stack((hv,wv),axis=1)
-
         ranges = np.repeat(self.maxRange, self.channels)
 
         for channel in range(self.channels):
