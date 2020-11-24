@@ -26,15 +26,15 @@ if __name__ == "__main__":
                     margins=[0.2, 0.2],
                     obstacle_size=[0.1, 0.1])
 
-    ldr = Lidar(r=6, channels=32)
+    map = gen.get_map()
+
+    ldr = Lidar(r=6, channels=32, map=map)
 
     for step in range(STEPS):
 
         ego_position = np.array([10+step,10])
 
-        map = gen.get_map()
-
-        thetas, ranges = ldr.scan(map, ego_position)
+        thetas, ranges = ldr.scan(ego_position)
 
         xObs = (ego_position[0]+ranges*np.cos(thetas)).astype(float)
         yObs = (ego_position[1]+ranges*np.sin(thetas)).astype(float)

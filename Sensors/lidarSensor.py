@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 
 class Lidar:
 
-    def __init__(self, r=np.inf, fov=[0,2*np.pi], channels=8):
+    def __init__(self, r=np.inf, fov=[0,2*np.pi], channels=8,
+                 resolution = 200, map=None):
         # channels --> number of arrays per scan
         self.maxRange = r
         self.fov = fov
@@ -12,10 +13,19 @@ class Lidar:
         self.thetas = np.linspace(0, 2*np.pi, channels, endpoint=False)
         self.threshold = np.sqrt(2*0.5**2)
 
+        self.resolution = resolution
+        self.map = map
 
-    def scan(self, map, position, resolution=200, dtype=np.int):
+    def scan(self, position, map=None, resolution=None, dtype=np.int):
         # position --> (height, width) of sensor position (robots)
         # map --> ground truth, with FULL visibility
+
+        if map == None:
+            map = self.map
+
+        if resolution == None:
+            resolution = self.resolution
+
         p1 = np.array(position)
 
         p2 = np.stack((p1[0]+self.maxRange*np.cos(self.thetas),
@@ -48,10 +58,13 @@ class Lidar:
         return self.thetas, self.ranges
 
 
-    def ranges_to_idx(self, position, resolution=200):
+    def ranges_to_idx(self, position, resolution=None):
 
         """ Providing a list of indexes, which are visible, givens the lidar
             sensors """
+
+        if resolution == None:
+            resolution = self.resolution
 
         p1 = position
 
