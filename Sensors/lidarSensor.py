@@ -16,6 +16,13 @@ class Lidar:
         self.resolution = resolution
         self.map = map
 
+
+    def update(self, position):
+
+        self.scan(position)
+        self.ranges_to_idx(position)
+
+
     def scan(self, position, map=None, resolution=None, dtype=np.int):
         # position --> (height, width) of sensor position (robots)
         # map --> ground truth, with FULL visibility

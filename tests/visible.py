@@ -34,7 +34,9 @@ if __name__ == "__main__":
 
         ego_position = np.array([10+step,10])
 
-        thetas, ranges = ldr.scan(ego_position)
+        ldr.update(ego_position)
+        thetas, ranges = ldr.thetas, ldr.ranges
+        indexes = ldr.idx
 
         xObs = (ego_position[0]+ranges*np.cos(thetas)).astype(float)
         yObs = (ego_position[1]+ranges*np.sin(thetas)).astype(float)
@@ -44,7 +46,6 @@ if __name__ == "__main__":
             plt.plot([y,ego_position[1]], [x, ego_position[0]],
                      c='r', linewidth=1, alpha=0.6)
 
-        indexes = ldr.ranges_to_idx(ego_position)
         map_copy = map.copy()
         map_copy[indexes[:,0], indexes[:,1]] = 0.5
 
