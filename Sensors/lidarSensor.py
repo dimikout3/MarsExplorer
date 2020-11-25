@@ -45,8 +45,8 @@ class Lidar:
         rX = np.round(rX).astype(dtype)
         rY = np.round(rY).astype(dtype)
 
-        rX = np.clip(rX, 0, map.shape[0])
-        rY = np.clip(rY, 0, map.shape[1])
+        rX = np.clip(rX, 0, map.shape[0] - 1)
+        rY = np.clip(rY, 0, map.shape[1] - 1)
 
         rays = np.stack((rX, rY), axis=2)
         # XXX: consider using np.unique(rays, axis=0?) to avoid repetition
@@ -91,8 +91,8 @@ class Lidar:
         rX = np.round(rX).astype(np.int)
         rY = np.round(rY).astype(np.int)
 
-        rX = np.clip(rX, 0, self.map.shape[0])
-        rY = np.clip(rY, 0, self.map.shape[1])
+        rX = np.clip(rX, 0, self.map.shape[0] - 1)
+        rY = np.clip(rY, 0, self.map.shape[1] - 1)
 
         idx = np.stack((rX, rY), axis=2)
         self.idx = np.reshape(idx, (resolution*self.channels, 2))
