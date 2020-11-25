@@ -1,0 +1,187 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Include the parent direcotry of GEP in python path (not nice looking)
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), ".."))
+
+from Envs.randomMapGenerator import Generator
+from Sensors.lidarSensor import Lidar
+
+
+class Grid:
+
+    def __init__(self, size=[30,30], movementCost=0.2, rendering=False):
+
+        self.sizeX = size[0]
+        self.sizeY = size[1]
+
+        self.movementCost = movementCost
+
+        self.SIZE = size
+
+        self.rendering = rendering
+
+
+    def reset(self, start=[0,0]):
+
+        self.maxSteps = self.sizeX * self.sizeY * 1.5
+
+        # groundTruthMap --> 1.0 obstacle
+        #                    0.3 free to move
+        gen = Generator(size=[self.sizeX, self.sizeY],
+                        number_rows=3, number_columns=3,
+                        noise=[0.04,0.04],
+                        margins=[0.2, 0.2],
+                        obstacle_size=[0.1, 0.1])
+        randomMap = gen.get_map().astype(np.double)
+        randomMapOriginal = randomMap.copy()
+        randomMap[randomMap == 1.0] = 1.0
+        randomMap[randomMap == 0.0] = 0.3
+        self.groundTruthMap = randomMap
+
+        # for lidar --> 0 free cell
+        #               1 obstacle
+        self.ldr = Lidar(r=6, channels=32, map=randomMapOriginal)
+
+        # 0 if not visible/visited, 1 if visible/visited
+        self.exploredMap = np.zeros(self.SIZE, dtype=np.double)
+
+        self.x, self.y = start[0], start[1]
+
+        self.state_trajectory = []
+        self.reward_trajectory = []
+
+        # starting position is explored
+        self._activateLidar()
+        self._updateMaps()
+
+        self.outputMap = self.exploredMap.copy()
+        self.outputMap[self.x, self.y] = 0.6
+
+        self.new_state = [self.outputMap]
+        self.reward = 0
+        self.done = False
+
+        self.timeStep = 0
+
+        return self.new_state
+
+
+    def _checkRendering(self):
+
+        renderingFromThreshold = np.sum(self.reward_trajectory) >= self.renderingThreshold
+        if self.done and renderingFromThreshold:
+            self.render()
+
+
+    def action_space_sample(self):
+        random = np.random.randint(4)
+        return random
+
+
+    def render(self, path = 'experiments'):
+
+        plt.imshow(image[0])
+        plt.title(f"Time Step: {step}")
+        plt.ylabel("Y-Axis")
+        plt.xlabel("X-Axis")
+        plt.savefig(f"{path}/step_{step}.png")
+        plt.close()
+
+
+    def _choice(self, choice):
+
+        if choice == 0:
+            self._move(x=1, y=0)
+        elif choice == 1:
+            self._move(x=-1, y=0)
+        elif choice == 2:
+            self._move(x=0, y=1)
+        elif choice == 3:
+            self._move(x=0, y=-1)
+
+
+    def _move(self, x, y):
+
+        self.x += x
+        self.y += y
+
+        # If we are out of bounds, fix!
+        if self.x < 0:
+            self.x = 0
+        elif self.x > self.sizeX-1:
+            self.x = self.sizeX-1
+        if self.y < 0:
+            self.y = 0
+        elif self.y > self.sizeY-1:
+            self.y = self.sizeY-1
+
+
+    def _updateMaps(self):
+
+        self.pastExploredMap = self.exploredMap.copy()
+
+        lidarX = self.lidarIndexes[:,0]
+        lidarY = self.lidarIndexes[:,1]
+        self.exploredMap[lidarX, lidarY] = self.groundTruthMap[lidarX, lidarY]
+
+        self.exploredMap[self.x, self.y] = 0.6
+
+
+    def _activateLidar(self):
+
+        self.ldr.update([self.x, self.y])
+        thetas, ranges = self.ldr.thetas, self.ldr.ranges
+        indexes = self.ldr.idx
+
+        self.lidarIndexes = indexes
+
+
+    def _applyRLactions(self,action):
+
+        self._choice(action)
+        self._activateLidar()
+        self._updateMaps()
+
+        self.outputMap = self.exploredMap.copy()
+        self.outputMap[self.x, self.y] = 0.5
+        self.new_state = [self.outputMap]
+        self.timeStep += 1
+
+
+    def _computeReward(self):
+
+        pastExploredCells = np.count_nonzero(self.pastExploredMap)
+        currentExploredCells = np.count_nonzero(self.exploredMap)
+
+        # TODO: add fixed cost for moving (-0.5 per move)
+        self.reward = currentExploredCells - pastExploredCells - self.movementCost
+
+
+    def _checkDone(self):
+
+        if self.timeStep > self.maxSteps:
+            self.done = True
+        elif np.count_nonzero(self.exploredMap) == self.SIZE[0]**2:
+            self.done = True
+            self.reward = self.sizeX * self.sizeY
+        else:
+            self.done = False
+
+
+    def _updateTrajectory(self):
+
+        self.state_trajectory.append(self.new_state)
+        self.reward_trajectory.append(self.reward)
+
+
+    def step(self, action):
+
+        self._applyRLactions(action)
+        self._computeReward()
+        self._checkDone()
+        self._updateTrajectory()
+        # self._checkRendering()
+
+        return self.new_state, self.reward, self.done
