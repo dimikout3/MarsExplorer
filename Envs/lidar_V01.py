@@ -44,6 +44,12 @@ class Grid:
         #               1 obstacle
         self.ldr = Lidar(r=6, channels=32, map=randomMapOriginal)
 
+        obstacles_idx = np.where(self.groundTruthMap == 1.0)
+        obstacles_x = obstacles_idx[0]
+        obstacles_y = obstacles_idx[1]
+        self.obstacles_idx = np.stack((obstacles_x, obstacles_y), axis=1)
+        self.obstacles_idx = [list(i) for i in self.obstacles_idx]
+
         # 0 if not visible/visited, 1 if visible/visited
         self.exploredMap = np.zeros(self.SIZE, dtype=np.double)
 
@@ -104,18 +110,16 @@ class Grid:
 
     def _move(self, x, y):
 
-        self.x += x
-        self.y += y
+        canditateX = self.x + x
+        canditateY = self.y + y
 
-        # If we are out of bounds, fix!
-        if self.x < 0:
-            self.x = 0
-        elif self.x > self.sizeX-1:
-            self.x = self.sizeX-1
-        if self.y < 0:
-            self.y = 0
-        elif self.y > self.sizeY-1:
-            self.y = self.sizeY-1
+        in_x_axis = canditateX>=0 and canditateX<=(self.sizeX-1)
+        in_y_axis = canditateY>=0 and canditateY<=(self.sizeY-1)
+        in_obstacles = [canditateX, canditateY] in self.obstacles_idx
+
+        if in_x_axis and in_y_axis and not in_obstacles:
+            self.x += x
+            self.y += y
 
 
     def _updateMaps(self):
