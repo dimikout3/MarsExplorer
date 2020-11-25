@@ -40,7 +40,6 @@ ACTION_SHAPE = 4
 MEAN_REWARD_BOUND = 20000
 SHOW_EVERY = 100
 
-BEST_M_REWARD = 60.
 
 def calc_loss(batch, net, tgt_net, device="cpu"):
     states, actions, rewards, dones, next_states = batch
@@ -76,6 +75,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     device = torch.device("cuda" if args.cuda else "cpu")
 
+    t = time.localtime()
+    timestamp = time.strftime('%b_%d_%Y_%H%M', t)
+
     env = grid(size=[SIZE_X, SIZE_Y])
 
     net = DQN(INPUT_SHAPE ,ACTION_SHAPE).to(device)
@@ -99,7 +101,6 @@ if __name__ == "__main__":
     best_m_reward = None
     episode = 0
     initial_time = time.time()
-    best_m_reward = BEST_M_REWARD
 
     loss_t = None
 
@@ -129,15 +130,11 @@ if __name__ == "__main__":
                 writer.add_scalar("loss", loss_t, frame_idx)
 
             if best_m_reward is None or best_m_reward < m_reward:
-                torch.save(net.state_dict(), args.output)
+                torch.save(net.state_dict(), args.output.replace("out", timestamp))
                 if best_m_reward is not None:
                     print("Best reward updated %.3f -> %.3f" % (
                         best_m_reward, m_reward))
                 best_m_reward = m_reward
-
-            if m_reward > MEAN_REWARD_BOUND:
-                print("Solved in %d frames!" % frame_idx)
-                break
 
         if len(buffer) < REPLAY_START_SIZE:
             continue
