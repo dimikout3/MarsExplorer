@@ -9,6 +9,9 @@ venv/
 /Models/saved_models/*
 /runs/*
 experiments/
+experiments*/
+*.dat
+runs
 
 # User-specific files
 *.suo

@@ -4,19 +4,15 @@ import numpy as np
 
 import torch
 
-from Envs.gridEnvPixelsFull import Grid as grid
-from Agents.agent import Agent
-from Buffers.experience import ExperienceBuffer
-
+from Envs.lidar_V01 import Grid as grid
 from Models.dqn_model import DQN
 
 import collections
 
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
-FPS = 25
 
-SIZE_X = 10
-SIZE_Y = 10
+SIZE_X = 30
+SIZE_Y = 30
 INPUT_CHANNELS = 1
 INPUT_SHAPE = (INPUT_CHANNELS, SIZE_X, SIZE_Y)
 ACTION_SHAPE = 4

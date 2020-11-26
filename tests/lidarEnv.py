@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt
 # Include the parent direcotry of GEP in python path (not nice looking)
 import os, sys
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     for step in range(TIME_STEPS):
 
         action = env.action_space_sample()
-        new_state, reward, is_done = env.step(0)
+        new_state, reward, is_done = env.step(action)
 
         plt.imshow(new_state[0])
         plt.show()

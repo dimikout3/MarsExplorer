@@ -11,27 +11,28 @@ import torch.optim as optim
 
 from tensorboardX import SummaryWriter
 
-from Envs.gridEnvPixelsFull import Grid as grid
+# from Envs.gridEnvPixelsFull import Grid as grid
+from Envs.lidar_V01 import Grid as grid
 from Agents.agent import Agent
 from Buffers.experience import ExperienceBuffer
 
 from Models.dqn_model import DQN
 
-EPISODES = 10000
+EPISODES = 100000
 
 GAMMA = 0.9
 BATCH_SIZE = 64
-REPLAY_SIZE = 7000
+REPLAY_SIZE = 10000
 LEARNING_RATE = 1e-4
-SYNC_TARGET_FRAMES = 1000
+SYNC_TARGET_FRAMES = 5000
 REPLAY_START_SIZE = REPLAY_SIZE
 
-EPSILON_DECAY_LAST_FRAME = int(EPISODES*150*0.7)
-EPSILON_START = 0.3
+EPSILON_DECAY_LAST_FRAME = 1000000
+EPSILON_START = 0.9
 EPSILON_FINAL = 0.2
 
-SIZE_X = 10
-SIZE_Y = 10
+SIZE_X = 30
+SIZE_Y = 30
 
 INPUT_CHANNELS = 1
 INPUT_SHAPE = (INPUT_CHANNELS, SIZE_X, SIZE_Y)

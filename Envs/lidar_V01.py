@@ -88,12 +88,13 @@ class Grid:
 
     def render(self, path = 'experiments'):
 
-        plt.imshow(image[0])
-        plt.title(f"Time Step: {step}")
-        plt.ylabel("Y-Axis")
-        plt.xlabel("X-Axis")
-        plt.savefig(f"{path}/step_{step}.png")
-        plt.close()
+        for step, state in enumerate(self.state_trajectory):
+            plt.imshow(state[0])
+            plt.title(f"Time Step: {step}")
+            plt.ylabel("Y-Axis")
+            plt.xlabel("X-Axis")
+            plt.savefig(f"{path}/step_{step}.png")
+            plt.close()
 
 
     def _choice(self, choice):
@@ -167,9 +168,9 @@ class Grid:
 
         if self.timeStep > self.maxSteps:
             self.done = True
-        elif np.count_nonzero(self.exploredMap) == self.SIZE[0]**2:
+        elif np.count_nonzero(self.exploredMap) > 0.95*(self.SIZE[0]**2):
             self.done = True
-            self.reward = self.sizeX * self.sizeY
+            # self.reward = self.reward + 100
         else:
             self.done = False
 

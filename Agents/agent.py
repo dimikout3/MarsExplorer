@@ -23,9 +23,9 @@ class Agent:
         #self.env.render()
 
         if np.random.random() < epsilon:
-            #action = self.env.action_space_sample()
+            action = self.env.action_space_sample()
             # Take random action
-            action = self.env.action_space.sample()
+            # action = self.env.action_space.sample()
         else:
             state_a = np.array([self.state], copy=True)
             state_v = torch.tensor(state_a, dtype=torch.double).to(device)
@@ -34,7 +34,8 @@ class Agent:
             action = int(act_v.item())
 
         # do step in the environment
-        new_state, reward, is_done, _ = self.env.step(action)
+        # new_state, reward, is_done, _ = self.env.step(action)
+        new_state, reward, is_done = self.env.step(action)
         self.total_reward += reward
 
         exp = Experience(self.state, action, reward,
