@@ -8,7 +8,7 @@ venv/
 
 /Models/saved_models/*
 /runs/*
-*.png
+experiments/
 
 # User-specific files
 *.suo
