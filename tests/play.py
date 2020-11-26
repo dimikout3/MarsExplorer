@@ -2,6 +2,11 @@ import time
 import argparse
 import numpy as np
 
+# Include the parent direcotry of GEP in python path (not nice looking)
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), ".."))
+
+
 import torch
 
 from Envs.lidar_V01 import Grid as grid
