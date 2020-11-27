@@ -59,9 +59,14 @@ if __name__ == "__main__":
         if done:
             break
 
-    env.render()
+    t = time.localtime()
+    timestamp = time.strftime('%b%d_%H_%M', t)
+
+    result_folder = os.path.join(os.getcwd(), f"experiments_{timestamp}")
+    os.makedirs(f"experiments_{timestamp}")
+    env.render(path = result_folder)
 
     print(f"Game finished after {time.time() - start_ts}[sec]")
     print(f"Total reward: {total_reward}")
     print("Action counts:", c)
-    print(f"Inspect the frames at dir:{args.record}")
+    print(f"Inspect the frames at dir:{result_folder}")
