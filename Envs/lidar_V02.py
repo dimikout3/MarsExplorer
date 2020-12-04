@@ -79,27 +79,16 @@ class Grid:
         return self.new_state
 
 
-    def _checkRendering(self):
-
-        renderingFromThreshold = np.sum(self.reward_trajectory) >= self.renderingThreshold
-        if self.done and renderingFromThreshold:
-            self.render()
-
-
     def action_space_sample(self):
         random = np.random.randint(4)
         return random
 
 
-    def render(self, path = 'experiments'):
+    def render(self):
 
-        for step, state in enumerate(self.state_trajectory):
-            plt.imshow(state[0])
-            plt.title(f"Time Step: {step}")
-            plt.ylabel("Y-Axis")
-            plt.xlabel("X-Axis")
-            plt.savefig(f"{path}/step_{step}.png")
-            plt.close()
+        plt.imshow(self.new_state)
+        plt.show()
+        plt.close()
 
 
     def _choice(self, choice):
@@ -192,7 +181,6 @@ class Grid:
         self._computeReward()
         self._checkDone()
         self._updateTrajectory()
-        # self._checkRendering()
 
         info = {}
         return self.new_state, self.reward, self.done, info
