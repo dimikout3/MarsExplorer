@@ -8,6 +8,8 @@ sys.path.append(os.path.join(os.getcwd(), ".."))
 from Envs.randomMapGenerator import Generator
 from Sensors.lidarSensor import Lidar
 
+from tests.rendering.viewer import Viewer
+
 import gym
 
 
@@ -76,6 +78,8 @@ class Grid:
 
         self.timeStep = 0
 
+        self.viewerActive = False
+
         return self.new_state
 
 
@@ -86,10 +90,11 @@ class Grid:
 
     def render(self):
 
-        plt.imshow(self.new_state)
-        plt.show()
-        plt.close()
+        if not self.viewerActive:
+            self.viewer = Viewer(self)
+            self.viewerActive = True
 
+        self.viewer.run()
 
     def _choice(self, choice):
 
