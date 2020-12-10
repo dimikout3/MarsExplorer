@@ -1,0 +1,7 @@
+README.md
+setup.py
+mars_explorer.egg-info/PKG-INFO
+mars_explorer.egg-info/SOURCES.txt
+mars_explorer.egg-info/dependency_links.txt
+mars_explorer.egg-info/requires.txt
+mars_explorer.egg-info/top_level.txt

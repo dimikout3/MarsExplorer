@@ -2,7 +2,7 @@ import gym
 import numpy as np
 from gym.wrappers import Monitor
 
-env = gym.make('gym_explorer:explorer-v01')
+env = gym.make('mars_explorer:explorer-v01')
 # env = gym.make('CartPole-v0')
 env = Monitor(env, './video', force=True)
 observation = env.reset(start=[17,17])

@@ -13,10 +13,10 @@ HEIGHT = 42*30  # 16 * 48 or 32 * 24 or 64 * 12
 FPS = 60
 TITLE = "lidar-env-V2"
 
-DRONE_IMG = 'metal.png'
+DRONE_IMG = 'drone.png'
 OBSTACLE_IMG = 'box.jpeg'
-BACKGROUND_IMG = 'gnd1.png'
-BG_IMG = 'back.png'
+BACKGROUND_IMG = 'space.jpg'
+BG_IMG = 'space.jpg'
 BGCOLOR = DARKGREY
 
 GRIDWIDTH = 42

@@ -1,8 +1,8 @@
 import numpy as np
 
-from gym_explorer.utils.randomMapGenerator import Generator
-from gym_explorer.utils.lidarSensor import Lidar
-from gym_explorer.render.viewer import Viewer
+from mars_explorer.utils.randomMapGenerator import Generator
+from mars_explorer.utils.lidarSensor import Lidar
+from mars_explorer.render.viewer import Viewer
 
 import gym
 from gym import error, spaces, utils

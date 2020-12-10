@@ -75,7 +75,7 @@ class Viewer():
 
     def draw(self):
         self.screen.blit(self.bck_img, (0, 0))
-        self.draw_grid()
+        # self.draw_grid()
         self.draw_lidar_rays()
         self.all_sprites.draw(self.screen)
         pg.display.flip()

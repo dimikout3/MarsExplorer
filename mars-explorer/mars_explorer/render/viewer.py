@@ -5,8 +5,8 @@ import pygame as pg
 import sys, os
 import numpy as np
 
-from gym_explorer.render.settings import *
-from gym_explorer.render.sprites import *
+from mars_explorer.render.settings import *
+from mars_explorer.render.sprites import *
 
 class Viewer():
     def __init__(self,env):

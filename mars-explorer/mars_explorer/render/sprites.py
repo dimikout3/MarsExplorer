@@ -1,6 +1,6 @@
 import pygame as pg
 import numpy as np
-from gym_explorer.render.settings import *
+from mars_explorer.render.settings import *
 
 class Drone(pg.sprite.Sprite):
     def __init__(self, viewer, env):

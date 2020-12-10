@@ -1,4 +1,4 @@
-from ray.rllib.trainners.ppo import PPOTrainer, DEFAULT_CONFIG
+from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
 from ray.tune.registry import register_env
 from ray.tune.logger import pretty_print
 import ray
@@ -8,29 +8,33 @@ import time
 
 from Envs.lidar_V02 import Grid as grid
 
+PATH = "/home/dkoutras/ray_results/PPO_lidar-V02_2020-11-27_19-23-08/checkpoint_981/checkpoint-981"
 
 def env_creator(env_config):
     return grid(size=[42,42])
 
 if __name__ == "__main__":
 
-    ray.init()
-    register_env("my_env", env_creator)
+    ray.init(num_gpus=1)
+    register_env("lidar-V02", env_creator)
 
     config = DEFAULT_CONFIG.copy()
-    config['num_workers'] = 5
-    # config['num_envs_per_worker'] = 1
-    # config['num_cpus_per_worker'] = 1
+    config['num_workers'] = 8
+    config['num_gpus'] = 1
     config['framework'] = "torch"
+    config['gamma'] = 0.9
 
-    trainner = PPOTrainer(config=config, env="my_env")
+    trainner = PPOTrainer(config=config, env="lidar-V02")
 
-    N = 1000
+    print(f"\nLoading trainner from dir {PATH}")
+    trainner.restore(PATH)
+
+    N = 2000
     results = []
     episode_data = []
     episode_json = []
 
-    for n in range(N):
+    for n in range(1000, 1000+N):
 
         initial_time = time.time()
 
