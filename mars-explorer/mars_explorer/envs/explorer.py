@@ -11,22 +11,25 @@ from gym.utils import seeding
 class Explorer(gym.Env):
     metadata = {'render.modes': ['rgb_array'],
                 'video.frames_per_second': 3}
-    def __init__(self, size=[42,42], movementCost=0.2, rendering=False):
+    # def __init__(self, size=[42,42], movementCost=0.2):
+    def __init__(self, conf):
 
-        self.sizeX = size[0]
-        self.sizeY = size[1]
+        self.conf = conf
 
-        self.movementCost = movementCost
+        self.sizeX = conf["size"][0]
+        self.sizeY = conf["size"][1]
 
-        self.SIZE = size
+        self.movementCost = conf["movementCost"]
 
-        self.rendering = rendering
+        self.SIZE = conf["size"]
 
         self.action_space = gym.spaces.Discrete(4)
         self.observation_space = gym.spaces.Box(0.,1.,(self.sizeX, self.sizeY, 1))
 
+        self.viewerActive = False
 
-    def reset(self, start=[0,0]):
+    # def reset(self, start=[0,0]):
+    def reset(self):
 
         self.maxSteps = self.sizeX * self.sizeY * 1.5
 
@@ -34,11 +37,7 @@ class Explorer(gym.Env):
         #                    0.3 free to move
         #                    0.0 unexplored
         #                    0.6 robot
-        gen = Generator(size=[self.sizeX, self.sizeY],
-                        number_rows=3, number_columns=3,
-                        noise=[0.04,0.04],
-                        margins=[0.2, 0.2],
-                        obstacle_size=[0.1, 0.1])
+        gen = Generator(self.conf)
         randomMap = gen.get_map().astype(np.double)
         randomMapOriginal = randomMap.copy()
         randomMap[randomMap == 1.0] = 1.0
@@ -47,7 +46,9 @@ class Explorer(gym.Env):
 
         # for lidar --> 0 free cell
         #               1 obstacle
-        self.ldr = Lidar(r=6, channels=32, map=randomMapOriginal)
+        self.ldr = Lidar(r=self.conf["lidar_range"],
+                         channels=self.conf["lidar_channels"],
+                         map=randomMapOriginal)
 
         obstacles_idx = np.where(self.groundTruthMap == 1.0)
         obstacles_x = obstacles_idx[0]
@@ -58,7 +59,7 @@ class Explorer(gym.Env):
         # 0 if not visible/visited, 1 if visible/visited
         self.exploredMap = np.zeros(self.SIZE, dtype=np.double)
 
-        self.x, self.y = start[0], start[1]
+        self.x, self.y = self.conf["start"][0], self.conf["start"][1]
 
         self.state_trajectory = []
         self.reward_trajectory = []
