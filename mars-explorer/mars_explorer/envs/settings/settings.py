@@ -45,6 +45,7 @@ DEFAULT_CONFIG={
               "light_mask":"img/light_350_hard.png",
               "night_color":(100, 100, 100),
               "draw_lidar":True,
-              "draw_grid":False
+              "draw_grid":False,
+              "draw_traceline":False
              }
 }

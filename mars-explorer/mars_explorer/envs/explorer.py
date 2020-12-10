@@ -10,7 +10,7 @@ from gym.utils import seeding
 
 class Explorer(gym.Env):
     metadata = {'render.modes': ['rgb_array'],
-                'video.frames_per_second': 3}
+                'video.frames_per_second': 6}
     # def __init__(self, size=[42,42], movementCost=0.2):
     def __init__(self, conf):
 
@@ -63,6 +63,7 @@ class Explorer(gym.Env):
 
         self.state_trajectory = []
         self.reward_trajectory = []
+        self.drone_trajectory = []
 
         # starting position is explored
         self._activateLidar()
@@ -181,6 +182,7 @@ class Explorer(gym.Env):
 
         self.state_trajectory.append(self.new_state)
         self.reward_trajectory.append(self.reward)
+        self.drone_trajectory.append([self.x, self.y])
 
 
     def step(self, action):

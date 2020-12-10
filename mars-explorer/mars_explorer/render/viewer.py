@@ -21,6 +21,7 @@ class Viewer():
         self.LIGHT_RADIUS = (self.TILESIZE*2, self.TILESIZE*2)
         self.LIGHT_GREY = (100, 100, 100)
         self.RED = (255, 0, 0)
+        self.BLUE = (0, 0, 255)
 
         self.load_data()
 
@@ -109,12 +110,27 @@ class Viewer():
         for y in range(0, self.conf["height"], self.TILESIZE):
             pg.draw.line(self.screen, self.LIGHT_GREY, (0, y), (self.conf["width"], y))
 
+    def draw_traceline(self):
+
+        if self.env.timeStep>2:
+            for step in range(len(self.env.drone_trajectory)-1):
+
+                currentX = self.env.drone_trajectory[-1-step][0]*self.TILESIZE+0.5*self.TILESIZE
+                currentY = self.env.drone_trajectory[-1-step][1]*self.TILESIZE+0.5*self.TILESIZE
+                prevX = self.env.drone_trajectory[-2-step][0]*self.TILESIZE+0.5*self.TILESIZE
+                prevY = self.env.drone_trajectory[-2-step][1]*self.TILESIZE+0.5*self.TILESIZE
+
+                pg.draw.line(self.screen, self.BLUE, (currentX, currentY),
+                             (prevX, prevY))
+
     def draw(self):
         self.screen.blit(self.bck_img, (0, 0))
         if self.conf["draw_grid"]:
             self.draw_grid()
         if self.conf["draw_lidar"]:
             self.draw_lidar_rays()
+        if self.conf["draw_traceline"]:
+            self.draw_traceline()
         self.all_sprites.draw(self.screen)
         # self.render_fog_camera()
         self.render_fog_explored()
