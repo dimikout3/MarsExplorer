@@ -111,9 +111,9 @@ class Viewer():
 
     def draw(self):
         self.screen.blit(self.bck_img, (0, 0))
-        if self.conf["enable_draw_grid"]:
+        if self.conf["draw_grid"]:
             self.draw_grid()
-        if self.conf["enable_draw_lidar"]:
+        if self.conf["draw_lidar"]:
             self.draw_lidar_rays()
         self.all_sprites.draw(self.screen)
         # self.render_fog_camera()

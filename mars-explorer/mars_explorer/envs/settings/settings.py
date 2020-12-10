@@ -44,7 +44,7 @@ DEFAULT_CONFIG={
               "background_img":'img/mars.jpg',
               "light_mask":"img/light_350_hard.png",
               "night_color":(100, 100, 100),
-              "enable_draw_lidar":True,
-              "enable_draw_grid":False
+              "draw_lidar":True,
+              "draw_grid":False
              }
 }
