@@ -1,6 +1,5 @@
 import pygame as pg
 import numpy as np
-from mars_explorer.render.settings import *
 
 class Drone(pg.sprite.Sprite):
     def __init__(self, viewer, env):
@@ -13,8 +12,8 @@ class Drone(pg.sprite.Sprite):
 
     def update(self):
         self.rotate_img()
-        self.rect.x = self.env.x * TILESIZE
-        self.rect.y = self.env.y * TILESIZE
+        self.rect.x = self.env.x * self.viewer.TILESIZE
+        self.rect.y = self.env.y * self.viewer.TILESIZE
 
     def rotate_img(self):
         if self.env.action == 0:
@@ -37,5 +36,5 @@ class Obstacle(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.rect.x = x * self.viewer.TILESIZE
+        self.rect.y = y * self.viewer.TILESIZE

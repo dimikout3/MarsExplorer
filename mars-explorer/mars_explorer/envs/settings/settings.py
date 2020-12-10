@@ -33,5 +33,16 @@ DEFAULT_CONFIG={
 
     # ======== SENSORS | LIDAR =======
     "lidar_range":6,
-    "lidar_channels":32
+    "lidar_channels":32,
+
+    # ======== VIEWER =========
+    "viewer":{"width":42*30,
+              "height":42*30,
+              "title":"Mars-Explorer-V01",
+              "drone_img":'img/drone.png',
+              "obstacle_img":'img/block.png',
+              "background_img":'img/mars.jpg',
+              "light_mask":"img/light_350_hard.png",
+              "night_color":(10, 10, 10),
+             }
 }

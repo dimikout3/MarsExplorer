@@ -91,7 +91,7 @@ class Explorer(gym.Env):
     def render(self, mode='human'):
 
         if not self.viewerActive:
-            self.viewer = Viewer(self)
+            self.viewer = Viewer(self, self.conf["viewer"])
             self.viewerActive = True
 
         self.viewer.run()

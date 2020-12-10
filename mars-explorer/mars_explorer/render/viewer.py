@@ -5,17 +5,23 @@ import pygame as pg
 import sys, os
 import numpy as np
 
-from mars_explorer.render.settings import *
 from mars_explorer.render.sprites import *
 
 class Viewer():
-    def __init__(self,env):
+    def __init__(self,env, conf):
         pg.init()
         self.env = env
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        pg.display.set_caption(TITLE)
+        self.conf = conf
+        self.screen = pg.display.set_mode((self.conf["width"], self.conf["height"]))
+        pg.display.set_caption(self.conf["title"])
         self.clock = pg.time.Clock()
         pg.key.set_repeat(500, 100)
+
+        self.TILESIZE = int(self.conf["width"]/self.env.sizeX)
+        self.LIGHT_RADIUS = (self.TILESIZE*2, self.TILESIZE*2)
+        self.LIGHT_GREY = (100, 100, 100)
+        self.RED = (255, 0, 0)
+
         self.load_data()
 
         # initialize all variables and do all the setup for a new game
@@ -27,21 +33,21 @@ class Viewer():
         self.player = Drone(self, env)
 
     def load_data(self):
-        self.drone_img = pg.image.load(DRONE_IMG).convert_alpha()
-        self.drone_img = pg.transform.scale(self.drone_img, (TILESIZE, TILESIZE))
+        self.drone_img = pg.image.load(self.conf["drone_img"]).convert_alpha()
+        self.drone_img = pg.transform.scale(self.drone_img, (self.TILESIZE, self.TILESIZE))
 
-        self.obstacle_img = pg.image.load(OBSTACLE_IMG).convert_alpha()
-        self.obstacle_img = pg.transform.scale(self.obstacle_img, (TILESIZE, TILESIZE))
+        self.obstacle_img = pg.image.load(self.conf["obstacle_img"]).convert_alpha()
+        self.obstacle_img = pg.transform.scale(self.obstacle_img, (self.TILESIZE, self.TILESIZE))
 
-        self.bck_img = pg.image.load(BG_IMG).convert_alpha()
-        self.bck_img = pg.transform.scale(self.bck_img, (HEIGHT, WIDTH))
+        self.bck_img = pg.image.load(self.conf["background_img"]).convert_alpha()
+        self.bck_img = pg.transform.scale(self.bck_img, (self.conf["height"], self.conf["width"]))
 
         # lighting effect
-        self.fog = pg.Surface((WIDTH, HEIGHT))
-        self.fog.fill(NIGHT_COLOR)
-        self.light_mask = pg.image.load(LIGHT_MASK).convert_alpha()
+        self.fog = pg.Surface((self.conf["width"], self.conf["height"]))
+        self.fog.fill(self.conf["night_color"])
+        self.light_mask = pg.image.load(self.conf["light_mask"]).convert_alpha()
         # TODO: check radius, image radius is not on edge of the square
-        self.light_mask = pg.transform.scale(self.light_mask, LIGHT_RADIUS)
+        self.light_mask = pg.transform.scale(self.light_mask, self.LIGHT_RADIUS)
         self.light_rect = self.light_mask.get_rect()
 
     def run(self):
@@ -58,10 +64,10 @@ class Viewer():
 
     def render_fog_camera(self):
         # dark everywhere except where the lidar sees every time step
-        cameraX = (self.env.x+.5)*TILESIZE
-        cameraY = (self.env.y+.5)*TILESIZE
+        cameraX = (self.env.x+.5)*self.TILESIZE
+        cameraY = (self.env.y+.5)*self.TILESIZE
 
-        self.fog.fill(NIGHT_COLOR)
+        self.fog.fill(self.conf["night_color"])
         self.light_rect.center = (cameraX, cameraY)
         print(f"light x:{cameraX} y:{cameraY}")
 
@@ -76,11 +82,11 @@ class Viewer():
         explored_idx = np.stack((explored_x, explored_y), axis=1)
         explored_idx = [list(i) for i in explored_idx]
 
-        self.fog.fill(NIGHT_COLOR)
+        self.fog.fill(self.conf["night_color"])
 
         for x,y in explored_idx:
-            cameraX = (x+.5)*TILESIZE
-            cameraY = (y+.5)*TILESIZE
+            cameraX = (x+.5)*self.TILESIZE
+            cameraY = (y+.5)*self.TILESIZE
 
             self.light_rect.center = (cameraX, cameraY)
 
@@ -89,19 +95,19 @@ class Viewer():
 
     def draw_lidar_rays(self):
         thetas, ranges = self.env.ldr.thetas, self.env.ldr.ranges
-        currentX = self.env.x*TILESIZE+0.5*TILESIZE
-        currentY = self.env.y*TILESIZE+0.5*TILESIZE
-        xObs = (currentX + TILESIZE*ranges*np.cos(thetas)).astype(float)
-        yObs = (currentY + TILESIZE*ranges*np.sin(thetas)).astype(float)
+        currentX = self.env.x*self.TILESIZE+0.5*self.TILESIZE
+        currentY = self.env.y*self.TILESIZE+0.5*self.TILESIZE
+        xObs = (currentX + self.TILESIZE*ranges*np.cos(thetas)).astype(float)
+        yObs = (currentY + self.TILESIZE*ranges*np.sin(thetas)).astype(float)
         for x,y in zip(xObs, yObs):
-            pg.draw.line(self.screen, RED, (currentX, currentY), (x, y))
-            pg.draw.circle(self.screen, RED, (x, y), TILESIZE/8)
+            pg.draw.line(self.screen, self.RED, (currentX, currentY), (x, y))
+            pg.draw.circle(self.screen, self.RED, (x, y), self.TILESIZE/8)
 
     def draw_grid(self):
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+        for x in range(0, self.conf["width"], self.TILESIZE):
+            pg.draw.line(self.screen, self.LIGHT_GREY, (x, 0), (x, self.conf["height"]))
+        for y in range(0, self.conf["height"], self.TILESIZE):
+            pg.draw.line(self.screen, self.LIGHT_GREY, (0, y), (self.conf["width"], y))
 
     def draw(self):
         self.screen.blit(self.bck_img, (0, 0))
