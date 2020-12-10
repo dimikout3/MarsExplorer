@@ -8,7 +8,7 @@ env = gym.make('mars_explorer:explorer-v01', conf=conf)
 env = Monitor(env, './video', force=True)
 observation = env.reset()
 
-for _ in range(600):
+for _ in range(200):
     action = np.random.randint(4)
     env.step(action)
     # env.render()

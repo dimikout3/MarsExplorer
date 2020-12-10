@@ -43,6 +43,8 @@ DEFAULT_CONFIG={
               "obstacle_img":'img/block.png',
               "background_img":'img/mars.jpg',
               "light_mask":"img/light_350_hard.png",
-              "night_color":(10, 10, 10),
+              "night_color":(100, 100, 100),
+              "enable_draw_lidar":True,
+              "enable_draw_grid":False
              }
 }
