@@ -20,6 +20,8 @@ DEFAULT_CONFIG={
     "margins":[1, 1],
     # obstacle size expressed in cell if rows/columns not activated
     "obstacle_size":[2,2],
+    # mas number of steps for the environment
+    "max_steps":400,
 
     # ======== SENSORS | LIDAR =======
     "lidar_range":6,

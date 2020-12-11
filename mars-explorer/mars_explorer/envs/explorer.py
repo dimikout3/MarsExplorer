@@ -37,7 +37,7 @@ class Explorer(gym.Env):
     # def reset(self, initial=[0,0]):
     def reset(self):
 
-        self.maxSteps = self.sizeX * self.sizeY * 1.5
+        self.maxSteps = self.conf["max_steps"]
 
         # groundTruthMap --> 1.0 obstacle
         #                    0.3 free to move
