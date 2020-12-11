@@ -1,0 +1,35 @@
+{
+    "start":[0,0],
+    "size":[42,42],
+
+    "movementCost":0.2,
+
+
+    "obstacles":10,
+
+    "number_rows":{},
+    "number_columns":{},
+
+    "noise":[0,0],
+
+    "margins":[1, 1],
+
+    "obstacle_size":[2,2],
+
+
+    "lidar_range":6,
+    "lidar_channels":32,
+
+    "viewer":{"width":1260,
+              "height":1260,
+              "title":"Mars-Explorer-V01",
+              "drone_img":"img/drone.png",
+              "obstacle_img":"img/block.png",
+              "background_img":"img/mars.jpg",
+              "light_mask":"img/light_350_hard.png",
+              "night_color":[100, 100, 100],
+              "draw_lidar":true,
+              "draw_grid":false,
+              "draw_traceline":false
+          }
+}
