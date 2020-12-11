@@ -7,10 +7,12 @@ import json
 import time
 
 from mars_explorer.envs.explorer import Explorer
-from mars_explorer.envs.settings.settings import DEFAULT_CONFIG as env_config
+
+# PATH = "/home/dkoutras/ray_results/PPO_custom-explorer_2020-12-11_00-08-54v0rb3cxa/checkpoint_1831/checkpoint-1831"
+PATH = ""
 
 def env_creator(env_config):
-    return Explorer(env_config)
+    return Explorer()
 
 if __name__ == "__main__":
 
@@ -25,19 +27,21 @@ if __name__ == "__main__":
 
     config['monitor'] = False
 
-    config["env_config"] = env_config
-    config["env_config"]["viewer"]["drone_img"] = "render/images/drone.png"
-    config["env_config"]["viewer"]["obstacle_img"] = "render/images/block.png"
-    config["env_config"]["viewer"]["background_img"] = "render/images/mars.jpg"
-    config["env_config"]["viewer"]["light_mask"] = "render/images/light_350_hard.png"
     trainner = PPOTrainer(config=config, env="custom-explorer")
 
-    N = 1000
+    if PATH != "":
+        print(f"\nLoading trainner from dir {PATH}")
+        trainner.restore(PATH)
+    else:
+        print(f"Starting trainning without a priori knowledge")
+
+    N_start = 0
+    N_finish = 3000
     results = []
     episode_data = []
     episode_json = []
 
-    for n in range(0, N):
+    for n in range(N_start, N_finish):
 
         initial_time = time.time()
 
