@@ -3,6 +3,7 @@ import numpy as np
 from mars_explorer.utils.randomMapGenerator import Generator
 from mars_explorer.utils.lidarSensor import Lidar
 from mars_explorer.render.viewer import Viewer
+from mars_explorer.envs.settings import DEFAULT_CONFIG
 
 import gym
 from gym import error, spaces, utils
@@ -11,24 +12,29 @@ from gym.utils import seeding
 class Explorer(gym.Env):
     metadata = {'render.modes': ['rgb_array'],
                 'video.frames_per_second': 6}
-    # def __init__(self, size=[42,42], movementCost=0.2):
-    def __init__(self, conf):
+    # def __init__(self, conf=None):
+    #  check why conf is not compatible will RLlib (it works on standalone gym)
+    def __init__(self):
 
-        self.conf = conf
+        # if conf==None:
+        #     self.conf = DEFAULT_CONFIG
+        # else:
+        #     self.conf = conf
+        self.conf = DEFAULT_CONFIG
 
-        self.sizeX = conf["size"][0]
-        self.sizeY = conf["size"][1]
+        self.sizeX = self.conf["size"][0]
+        self.sizeY = self.conf["size"][1]
 
-        self.movementCost = conf["movementCost"]
+        self.movementCost = self.conf["movementCost"]
 
-        self.SIZE = conf["size"]
+        self.SIZE = self.conf["size"]
 
         self.action_space = gym.spaces.Discrete(4)
         self.observation_space = gym.spaces.Box(0.,1.,(self.sizeX, self.sizeY, 1))
 
         self.viewerActive = False
 
-    # def reset(self, start=[0,0]):
+    # def reset(self, initial=[0,0]):
     def reset(self):
 
         self.maxSteps = self.sizeX * self.sizeY * 1.5
@@ -59,13 +65,13 @@ class Explorer(gym.Env):
         # 0 if not visible/visited, 1 if visible/visited
         self.exploredMap = np.zeros(self.SIZE, dtype=np.double)
 
-        self.x, self.y = self.conf["start"][0], self.conf["start"][1]
+        self.x, self.y = self.conf["initial"][0], self.conf["initial"][1]
 
         self.state_trajectory = []
         self.reward_trajectory = []
         self.drone_trajectory = []
 
-        # starting position is explored
+        # initialing position is explored
         self._activateLidar()
         self._updateMaps()
 

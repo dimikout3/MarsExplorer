@@ -34,6 +34,7 @@ class Viewer():
         self.player = Drone(self, env)
 
     def load_data(self):
+        print(self.conf["drone_img"])
         self.drone_img = pg.image.load(self.conf["drone_img"]).convert_alpha()
         self.drone_img = pg.transform.scale(self.drone_img, (self.TILESIZE, self.TILESIZE))
 

@@ -1,17 +1,7 @@
-import numpy as np
-
-from mars_explorer.utils.randomMapGenerator import Generator
-from mars_explorer.utils.lidarSensor import Lidar
-from mars_explorer.render.viewer import Viewer
-
-import gym
-from gym import error, spaces, utils
-from gym.utils import seeding
-
 DEFAULT_CONFIG={
     # ======== TOPOLOGY =======
     #  general configuration for the topology of operational area
-    "start":[0,0],
+    "initial":[0,0],
     "size":[42,42],
     #  configuration regarding the movements of uav
     "movementCost":0.2,
@@ -39,10 +29,10 @@ DEFAULT_CONFIG={
     "viewer":{"width":42*30,
               "height":42*30,
               "title":"Mars-Explorer-V01",
-              "drone_img":'img/drone.png',
-              "obstacle_img":'img/block.png',
-              "background_img":'img/mars.jpg',
-              "light_mask":"img/light_350_hard.png",
+              "drone_img":'/home/dkoutras/GeneralExplorationPolicy/mars-explorer/tests/img/drone.png',
+              "obstacle_img":'/home/dkoutras/GeneralExplorationPolicy/mars-explorer/tests/img/block.png',
+              "background_img":'/home/dkoutras/GeneralExplorationPolicy/mars-explorer/tests/img/mars.jpg',
+              "light_mask":"/home/dkoutras/GeneralExplorationPolicy/mars-explorer/tests/img/light_350_hard.png",
               "night_color":(100, 100, 100),
               "draw_lidar":True,
               "draw_grid":False,
