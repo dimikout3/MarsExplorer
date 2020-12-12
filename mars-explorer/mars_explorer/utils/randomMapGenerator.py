@@ -38,10 +38,11 @@ class Generator:
             ob_width = np.random.randint(self.obstacle_size[0], self.obstacle_size[1]+1)
             ob_height = np.random.randint(self.obstacle_size[0], self.obstacle_size[1]+1)
 
-            self.hv = np.concatenate((self.hv, np.repeat(self.hv[obstacle], ob_height)))
-            self.wv = np.concatenate((self.wv, np.arange(self.wv[obstacle], self.wv[obstacle]+ob_height)))
-            self.wv = np.concatenate((self.wv, np.repeat(self.wv[obstacle], ob_width)))
-            self.hv = np.concatenate((self.hv, np.arange(self.hv[obstacle], self.hv[obstacle]+ob_width)))
+            h_ind = np.arange(self.hv[obstacle], self.hv[obstacle]+ob_height)
+            w_ind = np.arange(self.wv[obstacle], self.wv[obstacle]+ob_width)
+            hv_ind, wv_ind = np.meshgrid(h_ind, w_ind)
+            self.hv = np.concatenate((self.hv, hv_ind.reshape(-1)))
+            self.wv = np.concatenate((self.wv, wv_ind.reshape(-1)))
 
             # rX = np.clip(rX, 0, map.shape[0] - 1)
             self.hv = np.clip(self.hv, 0, self.size[0]-1)
