@@ -35,8 +35,8 @@ class Generator:
     def _randomObstacleSizeCell(self):
         # determine obstacle size (random towards height and width axis)
         for obstacle in range(self.hv.shape[0]):
-            ob_width = np.random.randint(1, self.obstacle_size[1]+1)
-            ob_height = np.random.randint(1, self.obstacle_size[0]+1)
+            ob_width = np.random.randint(self.obstacle_size[0], self.obstacle_size[1]+1)
+            ob_height = np.random.randint(self.obstacle_size[0], self.obstacle_size[1]+1)
 
             self.hv = np.concatenate((self.hv, np.repeat(self.hv[obstacle], ob_height)))
             self.wv = np.concatenate((self.wv, np.arange(self.wv[obstacle], self.wv[obstacle]+ob_height)))
@@ -45,7 +45,7 @@ class Generator:
 
             # rX = np.clip(rX, 0, map.shape[0] - 1)
             self.hv = np.clip(self.hv, 0, self.size[0]-1)
-            self.hv = np.clip(self.hv, 0, self.size[1]-1)
+            self.wv = np.clip(self.wv, 0, self.size[1]-1)
 
     def _randomObstacleSize(self):
         # determine obstacle size (random towards height and width axis)
