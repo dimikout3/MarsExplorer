@@ -85,6 +85,8 @@ class Explorer(gym.Env):
         self.timeStep = 0
 
         self.viewerActive = False
+        self.out_of_bounds = False
+        self.collision = False
         self.action = 0
 
         return self.new_state
@@ -130,6 +132,13 @@ class Explorer(gym.Env):
         if in_x_axis and in_y_axis and not in_obstacles:
             self.x += x
             self.y += y
+        elif not in_x_axis or not in_y_axis:
+            # out of bounds move, episode terminated with punishment (negative
+            # reward)
+            self.out_of_bounds = True
+        elif in_obstacles:
+            # collision with obstacle, punishment (negative reward)
+            self.collision = True
 
 
     def _updateMaps(self):
@@ -177,11 +186,15 @@ class Explorer(gym.Env):
 
         if self.timeStep > self.maxSteps:
             self.done = True
-        elif np.count_nonzero(self.exploredMap) > 0.95*(self.SIZE[0]**2):
+        elif np.count_nonzero(self.exploredMap) > 0.95*(self.SIZE[0]*self.SIZE[1]):
             self.done = True
-            # self.reward = self.reward + 100
-        else:
-            self.done = False
+            self.reward = self.conf["bonus_reward"]
+        elif self.collision:
+            self.done = True
+            self.reward = self.conf["collision_reward"]
+        elif self.out_of_bounds:
+            self.done = True
+            self.reward = self.conf["out_of_bounds_reward"]
 
 
     def _updateTrajectory(self):
