@@ -1,4 +1,5 @@
 from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
+# from ray.rllib.agents.sac import SACTrainer, DEFAULT_CONFIG
 from ray.tune.registry import register_env
 from ray.tune.logger import pretty_print
 import ray
@@ -8,7 +9,8 @@ import time
 
 from mars_explorer.envs.explorer import Explorer
 
-# PATH = "/home/dkoutras/ray_results/PPO_custom-explorer_2020-12-11_00-08-54v0rb3cxa/checkpoint_1831/checkpoint-1831"
+from tensorboardX import SummaryWriter
+
 PATH = ""
 
 def env_creator(env_config):
@@ -23,11 +25,24 @@ if __name__ == "__main__":
     config['num_workers'] = 8
     config['num_gpus'] = 1
     config['framework'] = "torch"
-    config['gamma'] = 0.9
+    config['gamma'] = 0.75
 
     config['monitor'] = False
 
+    # PPO config ...
+    # config['lr'] = 1e-4
+    # config['train_batch_size']
+    config['model']['dim'] = 21
+    config['model']["fcnet_hiddens"] = [256,256]
+    # config['model']['conv_filters'] = [ [16, [3, 3], 1],
+    #                                     # [16, [3, 3], 1],
+    #                                     # [32, [config['model']['dim'], config['model']['dim']], 1]]#,
+    #                                     [32, [config['model']['dim'], config['model']['dim']], 1]]
+    config['model']['conv_filters'] = [ [8, [4, 4], 2],
+                                        [16, [2, 2], 2],
+                                        [512, [6, 6], 1]]#,
     trainner = PPOTrainer(config=config, env="custom-explorer")
+    # trainner = SACTrainer(config=config, env="mars_explorer:explorer-v01")
 
     if PATH != "":
         print(f"\nLoading trainner from dir {PATH}")
@@ -41,14 +56,16 @@ if __name__ == "__main__":
     episode_data = []
     episode_json = []
 
-    for n in range(N_start, N_finish):
+    writer = SummaryWriter(comment="PPO-GEP")
+
+    for batch in range(N_start, N_finish):
 
         initial_time = time.time()
 
         result = trainner.train()
         results.append(result)
 
-        episode = {'n': n,
+        episode = {'n': batch,
                    'episode_reward_min':  result['episode_reward_min'],
                    'episode_reward_mean': result['episode_reward_mean'],
                    'episode_reward_max':  result['episode_reward_max'],
@@ -57,8 +74,15 @@ if __name__ == "__main__":
         episode_data.append(episode)
         episode_json.append(json.dumps(episode))
 
-        if n % 10 == 0:
+        writer.add_scalar("reward_min", result['episode_reward_min'], batch)
+        writer.add_scalar("reward_mean", result['episode_reward_mean'], batch)
+        writer.add_scalar("reward_max", result['episode_reward_max'], batch)
+
+        if batch % 10 == 0:
             checkpoint = trainner.save()
             print("checkpoint saved at", checkpoint)
 
-        print(f'{n:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f} time:{time.time() - initial_time:.2f}[sec]')
+        print(f'{batch:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f} time:{time.time() - initial_time:.2f}[sec]')
+
+    writer.close()
+    print("\n Finished successfully")
