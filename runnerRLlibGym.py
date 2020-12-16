@@ -6,6 +6,7 @@ import ray
 
 import json
 import time
+import argparse
 
 from mars_explorer.envs.explorer import Explorer
 
@@ -16,16 +17,33 @@ PATH = ""
 def env_creator(env_config):
     return Explorer()
 
+def getArgs():
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        '-w', '--workers',
+        default=4,
+        type=int,
+        help='Number of worker (=cores)')
+    argparser.add_argument(
+        '-g', '--gamma',
+        default=0.99,
+        type=float,
+        help='Gamma to be used in Q calculations')
+    return argparser.parse_args()
+
+
 if __name__ == "__main__":
+
+    args = getArgs()
 
     ray.init(num_gpus=1)
     register_env("custom-explorer", env_creator)
 
     config = DEFAULT_CONFIG.copy()
-    config['num_workers'] = 8
+    config['num_workers'] = args.workers
     config['num_gpus'] = 1
     config['framework'] = "torch"
-    config['gamma'] = 0.75
+    config['gamma'] = args.gamma
 
     config['monitor'] = False
 
@@ -38,7 +56,7 @@ if __name__ == "__main__":
     #                                     # [16, [3, 3], 1],
     #                                     # [32, [config['model']['dim'], config['model']['dim']], 1]]#,
     #                                     [32, [config['model']['dim'], config['model']['dim']], 1]]
-    config['model']['conv_filters'] = [ [8, [4, 4], 2],
+    config['model']['conv_filters'] = [ [8, [3, 3], 2],
                                         [16, [2, 2], 2],
                                         [512, [6, 6], 1]]#,
     trainner = PPOTrainer(config=config, env="custom-explorer")
