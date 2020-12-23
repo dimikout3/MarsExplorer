@@ -33,17 +33,16 @@ if __name__ == "__main__":
     # config['lr'] = 1e-4
     # config['train_batch_size']
     config['model']['dim'] = 21
-    config['model']["fcnet_hiddens"] = [256,256]
     # config['model']['conv_filters'] = [ [16, [3, 3], 1],
     #                                     # [16, [3, 3], 1],
     #                                     # [32, [config['model']['dim'], config['model']['dim']], 1]]#,
     #                                     [32, [config['model']['dim'], config['model']['dim']], 1]]
-    config['model']['conv_filters'] = [ [8, [4, 4], 2],
+    config['model']['conv_filters'] = [ [8, [4, 4], 4],
                                         [16, [2, 2], 2],
-                                        [512, [6, 6], 1]]#,
+                                        [512, [3, 3], 1]]#,
     # trainner = PPOTrainer(config=config, env="custom-explorer")
 
-    config["buffer_size"] = 300_000
+    config["buffer_size"] = 500_000
     # If True prioritized replay buffer will be used.
     config["prioritized_replay"] = True
     trainner = SACTrainer(config=config, env="mars_explorer:explorer-v01")
