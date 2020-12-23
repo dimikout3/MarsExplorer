@@ -22,9 +22,9 @@ DEFAULT_CONFIG={
     "obstacle_size":[2,2],
     # mas number of steps for the environment
     "max_steps":400,
-    "bonus_reward":50,
-    "collision_reward":-15,
-    "out_of_bounds_reward":-5,
+    "bonus_reward":400,
+    "collision_reward":-400,
+    "out_of_bounds_reward":-400,
 
     # ======== SENSORS | LIDAR =======
     "lidar_range":6,
