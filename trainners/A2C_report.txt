@@ -1,0 +1,30 @@
+pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1391)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1391)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1389)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1389)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1392)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1392)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1395)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1395)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1390)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1390)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1396)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1396)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+[2m[36m(pid=1394)[0m pygame 2.0.0 (SDL 2.0.12, python 3.8.5)
+[2m[36m(pid=1394)[0m Hello from the pygame community. https://www.pygame.org/contribute.html
+Starting trainning without a priori knowledge
+checkpoint saved at /home/dkoutras/ray_results/A2C_mars_explorer:explorer-v01_2020-12-23_13-43-400id_mrfs/checkpoint_1/checkpoint-1
+  0: Min/Mean/Max reward: -400.0000/-395.2305/-360.2000 time:0.33[sec]
+  1: Min/Mean/Max reward: -400.0000/-390.3509/-178.6000 time:5.11[sec]
+  2: Min/Mean/Max reward: -400.0000/-386.6399/-90.0000 time:5.20[sec]
+  3: Min/Mean/Max reward: -400.0000/-372.4391/-113.4000 time:5.09[sec]
+  4: Min/Mean/Max reward: -400.0000/-349.8269/-123.4000 time:5.11[sec]
+  5: Min/Mean/Max reward: -400.0000/-332.8891/-126.4000 time:5.00[sec]
+  6: Min/Mean/Max reward: -400.0000/-318.3894/-125.4000 time:5.05[sec]
+  7: Min/Mean/Max reward: -400.0000/-309.4204/-122.6000 time:5.14[sec]
+  8: Min/Mean/Max reward: -400.0000/-306.2778/-129.6000 time:5.11[sec]
+  9: Min/Mean/Max reward: -400.0000/-306.2401/-118.0000 time:5.11[sec]
+
+ Finished successfully

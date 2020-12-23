@@ -1,0 +1,30 @@
+{
+	"gamma":0.9,
+	"trainners":
+	{
+		"PPO":
+		{
+			"path":"runners/PPO.py",
+			"steps":3000,
+			"workers":20
+		},
+		"SAC":
+		{
+			"path":"runners/SAC.py",
+			"steps":6000,
+			"workers":20
+		},
+		"DQN":
+		{
+			"path":"runners/DQN.py",
+			"steps":6000,
+			"workers":20
+		},
+		"A2C":
+		{
+			"path":"runners/A2C.py",
+			"steps":6000,
+			"workers":20
+		}
+	}
+}
