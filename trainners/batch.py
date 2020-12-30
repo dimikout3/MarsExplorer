@@ -3,7 +3,7 @@ import time
 import subprocess as sp
 import json
 
-SAVE_LOG = True
+SAVE_LOG = False
 
 if __name__ == "__main__":
 

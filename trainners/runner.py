@@ -98,7 +98,7 @@ if __name__ == "__main__":
             checkpoint = trainner.save()
             print("checkpoint saved at", checkpoint)
 
-        print(f'{batch:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f} time:{time.time() - initial_time:.2f}[sec]')
+        print(f'{batch:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f} time:{time.time() - initial_time:.2f}[sec] run:{args.run}')
 
     writer.close()
     print("\n Finished successfully")
