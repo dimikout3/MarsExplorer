@@ -12,6 +12,7 @@ experiments/
 experiments*/
 *.dat
 runs
+*report.txt
 
 # User-specific files
 *.suo
