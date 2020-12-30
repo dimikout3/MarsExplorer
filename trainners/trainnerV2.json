@@ -229,6 +229,6 @@
 				"out_of_bounds_reward":400,
 				"obstacle_size":[4, 4]
 			}
-		},
+		}
 	}
 }
