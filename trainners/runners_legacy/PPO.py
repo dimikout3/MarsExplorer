@@ -58,7 +58,6 @@ if __name__ == "__main__":
                                         [16, [2, 2], 2],
                                         [512, [6, 6], 1]]
     trainner = PPOTrainer(config=config, env="custom-explorer")
-    # trainner = SACTrainer(config=config, env="mars_explorer:explorer-v01")
 
     if PATH != "":
         print(f"\nLoading trainner from dir {PATH}")

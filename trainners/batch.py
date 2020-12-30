@@ -7,21 +7,25 @@ SAVE_LOG = True
 
 if __name__ == "__main__":
 
-    conf = json.load(open('trainner.json','r'))
+    conf_path = "trainnerV2.json"
+    conf = json.load(open(conf_path,'r'))
 
-    for trainner, params in conf["trainners"].items():
+    for run, params in conf["run"].items():
 
-        print(f"Running simulation for trainner {trainner}")
+        print(f"Running simulation for run {run}")
 
-        call = ["python",params["path"],
+        call = ["python","runner.py",
+                "--agent", str(params["agent"]),
+                "--run", str(run),
                 "--workers", str(params["workers"]),
                 "--gamma", str(conf["gamma"]),
+                "--configuration", str(conf_path),
                 "--steps", str(params["steps"])]
 
-        print(call)
+        print(str(call))
 
         if SAVE_LOG:
-            fout = open(f"{trainner}_report.txt","w")
+            fout = open(f"{run}_report.txt","w")
             s = sp.Popen(call, stdout=fout)
             fout.close()
         else:
