@@ -51,14 +51,17 @@ class Generator:
     def _randomObstacleSize(self):
         # determine obstacle size (random towards height and width axis)
         for obstacle in range(self.hv.shape[0]):
-            # BUG:  check if width*obstacle_size[1]>1 [np.clip to solve]
-            ob_width = np.random.randint(1, self.width*self.obstacle_size[1])
-            ob_height = np.random.randint(1, self.height*self.obstacle_size[0])
+            ob_width = np.random.randint(1, self.obstacle_size[1])
+            ob_height = np.random.randint(1, self.obstacle_size[0])
 
-            self.hv = np.concatenate((self.hv, np.repeat(self.hv[obstacle], ob_height)))
-            self.wv = np.concatenate((self.wv, np.arange(self.wv[obstacle], self.wv[obstacle]+ob_height)))
-            self.wv = np.concatenate((self.wv, np.repeat(self.wv[obstacle], ob_width)))
-            self.hv = np.concatenate((self.hv, np.arange(self.hv[obstacle], self.hv[obstacle]+ob_width)))
+            h_ind = np.arange(self.hv[obstacle], self.hv[obstacle]+ob_height)
+            w_ind = np.arange(self.wv[obstacle], self.wv[obstacle]+ob_width)
+            hv_ind, wv_ind = np.meshgrid(h_ind, w_ind)
+            self.hv = np.concatenate((self.hv, hv_ind.reshape(-1)))
+            self.wv = np.concatenate((self.wv, wv_ind.reshape(-1)))
+
+            self.hv = np.clip(self.hv, 0, self.size[0]-1)
+            self.wv = np.clip(self.wv, 0, self.size[1]-1)
 
 
     def _obstaclesInitialPoistions(self):
@@ -73,11 +76,11 @@ class Generator:
 
         else:
             # obstacles are placed on rows and colums and then noise is applied
-            w_obstacles = np.linspace(self.width*self.margins[1],
-                                      self.width-1-self.width*self.margins[1],
+            w_obstacles = np.linspace(self.margins[1],
+                                      self.width-1-self.margins[1],
                                       self.number_columns,dtype=np.int)
-            h_obstacles = np.linspace(self.height*self.margins[0],
-                                      self.height-1-self.height*self.margins[0],
+            h_obstacles = np.linspace(self.margins[0],
+                                      self.height-1-self.margins[0],
                                       self.number_rows,dtype=np.int)
 
             hv, wv = np.meshgrid(h_obstacles, w_obstacles)
@@ -88,11 +91,11 @@ class Generator:
 
     def _noiseObstaclesPositions(self):
         # add noise to existing obstacles
-        h_top = np.ceil(self.height*self.noise[0])
-        h_btm = -np.floor(self.height*self.noise[0])
+        h_top = np.ceil(self.noise[0])
+        h_btm = -np.floor(self.noise[0])
         if h_btm >= h_top:h_top+=1
-        w_top = np.ceil(self.width*self.noise[1])
-        w_btm = -np.floor(self.width*self.noise[1])
+        w_top = np.ceil(self.noise[1])
+        w_btm = -np.floor(self.noise[1])
         if w_btm >= w_top:w_top+=1
 
         self.hv += np.random.randint(h_btm, h_top, size = self.hv.shape[0])

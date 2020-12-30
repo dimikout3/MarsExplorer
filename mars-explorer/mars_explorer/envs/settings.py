@@ -15,6 +15,7 @@ DEFAULT_CONFIG={
     "number_rows":None,
     "number_columns":None,
     # noise activated only when row/columns activated
+    # maximum noise on each axes
     "noise":[0,0],
     # margins expressed in cell if rows/columns not activated
     "margins":[1, 1],
