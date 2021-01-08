@@ -187,7 +187,7 @@ class ExplorerConf(gym.Env):
 
         if self.timeStep > self.maxSteps:
             self.done = True
-        elif np.count_nonzero(self.exploredMap) > 0.95*(self.SIZE[0]*self.SIZE[1]):
+        elif np.count_nonzero(self.exploredMap) > 0.99*(self.SIZE[0]*self.SIZE[1]):
             self.done = True
             self.reward = self.conf["bonus_reward"]
         elif self.collision:

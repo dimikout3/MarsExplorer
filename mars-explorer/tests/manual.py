@@ -3,18 +3,37 @@ import numpy as np
 import time
 import pygame as pg
 import argparse
+import matplotlib.pyplot as plt
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
 def get_conf():
-    conf["viewer"]["night_color"] = (0,0,0)
+    conf["size"] = [30, 30]
+    conf["obstacles"] = 20
+    conf["lidar_range"] = 4
+    conf["obstacle_size"] = [1,3]
+
+    conf["viewer"]["night_color"] = (0, 0, 0)
     conf["viewer"]["draw_lidar"] = True
+
+    # conf["viewer"]["width"] = conf["size"][0]*42
+    # conf["viewer"]["width"] = conf["size"][1]*42
 
     conf["viewer"]["drone_img"] = "../img/drone.png"
     conf["viewer"]["obstacle_img"] = "../img/block.png"
     conf["viewer"]["background_img"] = "../img/mars.jpg"
     conf["viewer"]["light_mask"] = "../img/light_350_hard.png"
     return conf
+
+
+def saveRend(rend, time_step):
+    plt.rcParams["axes.grid"] = False
+    plt.axis('off')
+    plt.imshow(rend)
+    # plt.savefig(f"{time_step}_env.png", bbox_inches='tight')
+    plt.savefig(f"{time_step}_env.png", bbox_inches='tight', dpi=300)
+    plt.close()
+
 
 def getArgs():
     argparser = argparse.ArgumentParser()
@@ -28,6 +47,11 @@ def getArgs():
         default=10,
         type=int,
         help='Games to be played')
+    argparser.add_argument(
+        '-s', '--save',
+        default=False,
+        action="store_true",
+        help='Save each rendered image')
     return argparser.parse_args()
 
 def event():
@@ -51,13 +75,16 @@ def play_game(env):
     total_reward = .0
     observation = env.reset()
     env.render()
-    while True:
+    for time_step in range(1000):
         action = event()
         obs, reward, done, info = env.step(action)
         total_reward += reward
         if done:
             break
-        env.render()
+        rendered = env.render()
+
+        if args.save:saveRend(rendered, time_step)
+
     return total_reward
 
 def close():
