@@ -1,0 +1,27 @@
+{
+	"root":"/home/dkoutras/ray_results/PPO_config_serach",
+	"params":{
+		"noise":{
+			"1":[1, 1],
+			"2":[2, 2],
+			"3":[3, 3]
+		},
+		"obstacle_size":{
+			"1":[2, 2],
+			"2":[4, 4]
+		},
+		"bonus_reward":{
+			"1":0,
+			"2":400
+		}
+	},
+	"categorized":{
+		"Noise level: 1":["lvl-[1,1,1]", "lvl-[1,1,2]", "lvl-[1,2,1]", "lvl-[1,2,2]"],
+		"Noise level: 2":["lvl-[2,1,1]", "lvl-[2,1,2]", "lvl-[2,2,1]", "lvl-[2,2,2]"],
+		"Noise level: 3":["lvl-[3,1,1]", "lvl-[3,1,2]", "lvl-[3,2,1]", "lvl-[3,2,2]"],
+		"Obstacle Size-Shape level: 1":["lvl-[1,1,1]", "lvl-[2,1,1]", "lvl-[3,1,1]", "lvl-[1,1,2]", "lvl-[2,1,2]", "lvl-[3,1,2]"],
+		"Obstacle Size-Shape level: 2":["lvl-[1,2,1]", "lvl-[2,2,1]", "lvl-[3,2,1]", "lvl-[1,2,2]", "lvl-[2,2,2]", "lvl-[3,2,2]"],
+		"Reward Sparsity level: 1":["lvl-[1,1,1]", "lvl-[2,1,1]", "lvl-[3,1,1]", "lvl-[1,2,1]", "lvl-[2,2,1]", "lvl-[3,2,1]"],
+		"Reward Sparsity level: 2":["lvl-[1,1,2]", "lvl-[2,1,2]", "lvl-[3,1,2]", "lvl-[1,2,2]", "lvl-[2,2,2]", "lvl-[3,2,2]"]
+	}
+}
