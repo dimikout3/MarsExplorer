@@ -6,6 +6,7 @@ import seaborn as sns
 
 import json
 import os
+import pickle as p
 
 from utils import smoothed
 from utils import reject_outliers
@@ -212,6 +213,8 @@ if __name__ == "__main__":
     df["iteration"] = df["iteration"]*4000/1_000_000
 
     df = smoothed(df, SMOOTH_FACTOR)
+
+    p.dump(df, open("DataFrame.pkl","wb"))
 
     df = df[df.iteration<0.97*df.iteration.max()]
 
