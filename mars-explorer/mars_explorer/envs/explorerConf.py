@@ -169,7 +169,7 @@ class ExplorerConf(gym.Env):
         self._updateMaps()
 
         self.outputMap = self.exploredMap.copy()
-        self.outputMap[self.x, self.y] = 0.5
+        self.outputMap[self.x, self.y] = 0.6
         self.new_state = np.reshape(self.outputMap, (self.sizeX, self.sizeY,1))
         self.timeStep += 1
 
