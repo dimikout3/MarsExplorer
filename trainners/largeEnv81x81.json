@@ -5,7 +5,7 @@
 		"Large-Env":
 		{
 			"steps":320,
-			"workers":6,
+			"workers":20,
 			"agent":"PPO",
 			"agent_conf":
 			{
