@@ -15,10 +15,10 @@ def defaultConfig(args):
     config['framework'] = "torch"
     config['gamma'] = args.gamma
 
-    config['model']['dim'] = 21
-    config['model']['conv_filters'] = [ [8, [3, 3], 2],
-                                        [16, [2, 2], 2],
-                                        [512, [6, 6], 1]]
+    # config['model']['dim'] = 21
+    # config['model']['conv_filters'] = [ [8, [3, 3], 2],
+    #                                     [16, [2, 2], 2],
+    #                                     [512, [6, 6], 1]]
 
     return config
 

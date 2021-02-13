@@ -12,7 +12,7 @@ from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
 SAVE = True
 
-size = [9,9]
+size = [81,81]
 
 conf["initial"] = [int(size[0]/2), int(size[1]/2 )]
 conf["size"] = size

@@ -1,0 +1,31 @@
+{
+	"gamma":0.9,
+	"run":
+	{
+		"Large-Env":
+		{
+			"steps":320,
+			"workers":6,
+			"agent":"PPO",
+			"agent_conf":
+			{
+				"max_steps":800
+			},
+			"env_conf":
+			{
+				"number_rows":12,
+				"number_columns":12,
+				"noise":[3,3],
+				"bonus_reward":0,
+				"collision_reward":0,
+				"out_of_bounds_reward":0,
+				"obstacle_size":[2, 2],
+				"size":[84, 84],
+				"viwer":{
+					"width":840,
+					"height":840
+				}
+			}
+		}
+	}
+}

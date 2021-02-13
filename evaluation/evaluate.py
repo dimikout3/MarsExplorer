@@ -11,6 +11,8 @@ import pickle as p
 from utils import smoothed
 from utils import reject_outliers
 from utils import std_factorized
+from utils import updates_seed
+from utils import expand_time
 
 plotstyle="ggplot"
 plt.style.use(f"{plotstyle}")
@@ -20,6 +22,11 @@ SMOOTH_FACTOR = 5
 OUTLIERS_FACTOR = 4
 STD_FACTOR = 0.1
 ALPHA = 0.25
+
+TITLE = True
+
+EXPAND_TIME = True
+EXPAND_FACTOR = 60
 
 def get_level():
     lvl = "lvl-["
@@ -57,8 +64,11 @@ def standalone():
         plt.fill_between(x_axis, lower, upper, alpha=0.3)
 
         plt.ylabel("Score normalized")
-        plt.xlabel("Timesteps (M)")
-        plt.title(level)
+        plt.xlabel("million timesteps")
+
+        plt.ylim(0,1.1)
+
+        if TITLE:plt.title(level)
 
         if SAVE:
             plt.savefig(f"{standalone_folder}/{level}.png", dpi=300)
@@ -89,8 +99,10 @@ def categorized():
                      dashes=False)
 
         plt.ylabel("Score normalized")
-        plt.xlabel("Timesteps (M)")
-        plt.title(title)
+        plt.xlabel("million timesteps")
+        if TITLE:plt.title(title)
+
+        plt.legend(title="Legend Title")
 
         if SAVE:
             plt.savefig(f"{categorized_folder}/{title}.png", dpi=300)
@@ -126,8 +138,10 @@ def categorized_std():
             plt.fill_between(x_axis, lower, upper, alpha=ALPHA)
 
         plt.ylabel("Score normalized")
-        plt.xlabel("Timesteps (M)")
-        plt.title(title)
+        plt.xlabel("million timesteps")
+        if TITLE:plt.title(title)
+
+        plt.legend(title="Level-$[d_t, d_m, d_b]$", fontsize=15, title_fontsize=15)
 
         if SAVE:
             plt.savefig(f"{categorized_folder}/{title}.png", dpi=300)
@@ -152,8 +166,9 @@ def combined():
                  hue='level',
                  dashes=False)
     plt.ylabel("Score normalized")
-    plt.xlabel("Timesteps (M)")
-    plt.title("Combined")
+    plt.xlabel("million timesteps")
+
+    if TITLE:plt.title("Combined")
 
     if SAVE:
         plt.savefig(f"{combined_folder}/Combined.jpg", dpi=300)
@@ -203,14 +218,20 @@ if __name__ == "__main__":
                                                    m=OUTLIERS_FACTOR)
 
             normalized_std = (np.std(episodes_rewards)-min)/(max-min)
+
             if STD_FACTOR<1:
                 normalized_std = std_factorized(normalized_std, STD_FACTOR)
 
             data["std"].append(normalized_std)
             data["iteration"].append(iteration)
 
+        # data = expand_time(data, EXPAND_FACTOR)
+
     df = pd.DataFrame(data)
     df["iteration"] = df["iteration"]*4000/1_000_000
+    df = updates_seed(df)
+
+    p.dump(df, open("DataFrameRaw.pkl","wb"))
 
     df = smoothed(df, SMOOTH_FACTOR)
 

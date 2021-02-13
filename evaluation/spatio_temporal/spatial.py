@@ -20,6 +20,7 @@ LEVELS = [
 "2_1_1", "2_2_1", "2_1_2", "2_2_2",
 "3_1_1", "3_2_1", "3_1_2", "3_2_2"]
 SAVE = True
+TITLE_LABEL=True
 
 
 def generate_cmap(ncolors=256, basic_color=[1.,0.,0.,1.]):
@@ -54,8 +55,7 @@ def hexbin(heatmap_data, title="", basic_color=[]):
     plt.ylim(0,21)
     plt.gca().invert_yaxis()
 
-    # img = plt.imread("mars.jpg")
-    # plt.imshow(img, extent=[0, 21, 0, 21])
+    if TITLE_LABEL:plt.title(f"level-[{level.replace('_',',')}]")
 
     if SAVE:
         plt.savefig(f"{title}.png", bbox_inches='tight', dpi=300)
@@ -87,8 +87,7 @@ def combined(data, title, basic_colors):
     plt.ylim(0,21)
     plt.gca().invert_yaxis()
 
-    # img = plt.imread("mars.jpg")
-    # plt.imshow(img, extent=[0, 21, 0, 21])
+    if TITLE_LABEL:plt.title(f"level-[{level.replace('_',',')}]")
 
     if SAVE:
         plt.savefig(f"{title}.png", bbox_inches='tight', dpi=300)

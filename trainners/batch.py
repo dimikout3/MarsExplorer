@@ -7,7 +7,8 @@ SAVE_LOG = False
 
 if __name__ == "__main__":
 
-    conf_path = "trainnerV2.json"
+    # conf_path = "trainnerV2.json"
+    conf_path = "largeEnv81x81.json"
     conf = json.load(open(conf_path,'r'))
 
     for run, params in conf["run"].items():
