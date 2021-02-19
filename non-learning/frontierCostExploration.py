@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
-N_GAMES = 2
+N_GAMES = 5
 N_STEPS = 50
-DELAY = 0.3
+DELAY = 0.2
 
 def get_conf():
     # conf["size"] = [84, 84]
@@ -57,12 +57,20 @@ def find_frontiers(obs):
     return np.array(frontiers)
 
 
-def evaluate(frontiers):
+def check_collision(distances, canditate_action, obs):
+
+    for index, (x,y) in enumerate(canditate_action):
+
+        if x<0 or y<0 or x>=obs.shape[0] or x>=obs.shape[1]:
+            distances[index] = np.inf
+        elif obs[x,y] == 1.:
+            distances[index] = np.inf
+
+    return distances
+
+
+def evaluate(frontiers, obs):
     # return the distance from each candiatate action
-    # canditate_action = [[env.x+1, env.y], # action 0 is right
-    #                     [env.x-1, env.y], # action 1 is left
-    #                     [env.x, env.y-1], # action 2 is down
-    #                     [env.x, env.y+1]] # action 3 is up
     canditate_action = [[env.x+1, env.y], # action 0 is right
                         [env.x-1, env.y], # action 1 is left
                         [env.x, env.y+1], # action 2 is down
@@ -71,13 +79,14 @@ def evaluate(frontiers):
     distances = distance.cdist(frontiers, canditate_action)
 
     evaluation = np.min(distances, axis=0)
+    evaluation = check_collision(evaluation, canditate_action, obs)
     return evaluation
 
 
 def get_action(obs):
 
     frontiers = find_frontiers(obs)
-    evaluate_actions = evaluate(frontiers)
+    evaluate_actions = evaluate(frontiers, obs)
 
     return np.argmin(evaluate_actions)
 

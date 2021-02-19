@@ -59,10 +59,6 @@ def find_frontiers(obs):
 
 def evaluate(frontiers):
     # return the distance from each candiatate action
-    # canditate_action = [[env.x+1, env.y], # action 0 is right
-    #                     [env.x-1, env.y], # action 1 is left
-    #                     [env.x, env.y-1], # action 2 is down
-    #                     [env.x, env.y+1]] # action 3 is up
     canditate_action = [[env.x+1, env.y], # action 0 is right
                         [env.x-1, env.y], # action 1 is left
                         [env.x, env.y+1], # action 2 is down
