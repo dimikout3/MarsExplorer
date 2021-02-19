@@ -13,7 +13,7 @@ N_STEPS = 50
 DELAY = 0.3
 
 def get_conf():
-    conf["size"] = [84, 84]
+    # conf["size"] = [84, 84]
     # conf["obstacles"] = 20
     # conf["lidar_range"] = 4
     # conf["obstacle_size"] = [1,3]
@@ -70,7 +70,7 @@ def evaluate(frontiers):
 
     distances = distance.cdist(frontiers, canditate_action)
 
-    evaluation = np.sum(distances, axis=0)
+    evaluation = np.min(distances, axis=0)
     return evaluation
 
 
