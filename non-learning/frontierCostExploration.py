@@ -5,29 +5,31 @@ import time
 import pygame as pg
 import argparse
 import matplotlib.pyplot as plt
+import json
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
 N_GAMES = 5
 N_STEPS = 50
 DELAY = 0.2
+CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
+
 
 def get_conf():
-    # conf["size"] = [84, 84]
-    # conf["obstacles"] = 20
-    # conf["lidar_range"] = 4
-    # conf["obstacle_size"] = [1,3]
 
-    conf["viewer"]["night_color"] = (0, 0, 0)
-    conf["viewer"]["draw_lidar"] = True
+    if CONF_PATH != "":
+        conf_json = json.load(open(CONF_PATH,'r'))
+        conf = conf_json["env_config"]
+        conf["margins"] = [3,3]
+    else:
+        conf["size"] = [84, 84]
+        # conf["obstacles"] = 20
+        # conf["lidar_range"] = 4
+        # conf["obstacle_size"] = [1,3]
 
-    # conf["viewer"]["width"] = conf["size"][0]*42
-    # conf["viewer"]["width"] = conf["size"][1]*42
+        conf["viewer"]["night_color"] = (0, 0, 0)
+        conf["viewer"]["draw_lidar"] = True
 
-    # conf["viewer"]["drone_img"] = "../img/drone.png"
-    # conf["viewer"]["obstacle_img"] = "../img/block.png"
-    # conf["viewer"]["background_img"] = "../img/mars.jpg"
-    # conf["viewer"]["light_mask"] = "../img/light_350_hard.png"
     return conf
 
 

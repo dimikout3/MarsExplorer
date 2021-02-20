@@ -5,29 +5,31 @@ import time
 import pygame as pg
 import argparse
 import matplotlib.pyplot as plt
+import json
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
 N_GAMES = 2
 N_STEPS = 50
 DELAY = 0.3
+CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
+
 
 def get_conf():
-    conf["size"] = [84, 84]
-    # conf["obstacles"] = 20
-    # conf["lidar_range"] = 4
-    # conf["obstacle_size"] = [1,3]
 
-    conf["viewer"]["night_color"] = (0, 0, 0)
-    conf["viewer"]["draw_lidar"] = True
+    if CONF_PATH != "":
+        conf_json = json.load(open(CONF_PATH,'r'))
+        conf = conf_json["env_config"]
+        conf["margins"] = [3,3]
+    else:
+        conf["size"] = [84, 84]
+        # conf["obstacles"] = 20
+        # conf["lidar_range"] = 4
+        # conf["obstacle_size"] = [1,3]
 
-    # conf["viewer"]["width"] = conf["size"][0]*42
-    # conf["viewer"]["width"] = conf["size"][1]*42
+        conf["viewer"]["night_color"] = (0, 0, 0)
+        conf["viewer"]["draw_lidar"] = True
 
-    # conf["viewer"]["drone_img"] = "../img/drone.png"
-    # conf["viewer"]["obstacle_img"] = "../img/block.png"
-    # conf["viewer"]["background_img"] = "../img/mars.jpg"
-    # conf["viewer"]["light_mask"] = "../img/light_350_hard.png"
     return conf
 
 
@@ -57,7 +59,19 @@ def find_frontiers(obs):
     return np.array(frontiers)
 
 
-def evaluate(frontiers):
+def check_collision(distances, canditate_action, obs):
+
+    for index, (x,y) in enumerate(canditate_action):
+
+        if x<0 or y<0 or x>=obs.shape[0] or x>=obs.shape[1]:
+            distances[index] = np.inf
+        elif obs[x,y] == 1.:
+            distances[index] = np.inf
+
+    return distances
+
+
+def evaluate(frontiers, obs):
     # return the distance from each candiatate action
     canditate_action = [[env.x+1, env.y], # action 0 is right
                         [env.x-1, env.y], # action 1 is left
@@ -67,13 +81,14 @@ def evaluate(frontiers):
     distances = distance.cdist(frontiers, canditate_action)
 
     evaluation = np.sum(distances, axis=0)
+    evaluation = check_collision(evaluation, canditate_action, obs)
     return evaluation
 
 
 def get_action(obs):
 
     frontiers = find_frontiers(obs)
-    evaluate_actions = evaluate(frontiers)
+    evaluate_actions = evaluate(frontiers, obs)
 
     return np.argmin(evaluate_actions)
 
