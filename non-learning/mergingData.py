@@ -13,7 +13,7 @@ plt.style.use(f"{plotstyle}")
 
 CASES = [["utility_42x42.p", "Area 42x42", "Utility"],
          ["cost_42x42.p", "Area 42x42", "Cost"],
-         # ["utility_84x84.p", "Area 84x84", "Utility"],
+         ["utility_84x84.p", "Area 84x84", "Utility"],
          ["cost_84x84.p", "Area 84x84", "Cost"]]
 
 
