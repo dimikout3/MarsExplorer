@@ -12,6 +12,7 @@ from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 N_GAMES = 2
 N_STEPS = 50
 DELAY = 0.3
+RENDER_ACTIVE = False
 CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
 
 
@@ -97,7 +98,7 @@ def play_game(env):
 
     total_reward = .0
     obs = env.reset()
-    env.render()
+    if RENDER_ACTIVE:env.render()
 
     for time_step in range(N_STEPS):
 
@@ -106,7 +107,7 @@ def play_game(env):
         obs, reward, done, info = env.step(action)
         total_reward += reward
 
-        env.render()
+        if RENDER_ACTIVE:env.render()
         time.sleep(DELAY)
 
         if done:
@@ -121,4 +122,5 @@ if __name__ == "__main__":
     env = gym.make('mars_explorer:exploConf-v01', conf=conf)
 
     for game in range(N_GAMES):
+        print(f"Running game:{game}")
         total_reward = play_game(env)
