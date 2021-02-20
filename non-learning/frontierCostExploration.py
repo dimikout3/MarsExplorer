@@ -6,12 +6,13 @@ import pygame as pg
 import argparse
 import matplotlib.pyplot as plt
 import json
+import pickle as p
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
-N_GAMES = 5
-N_STEPS = 30
-DELAY = 0.1
+N_GAMES = 30
+N_STEPS = 1000
+DELAY = 0.
 RENDER_ACTIVE = False
 CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
 
@@ -96,7 +97,7 @@ def get_action(obs):
 
 def play_game(env):
 
-    total_reward = .0
+    exploration_rate = []
     obs = env.reset()
     if RENDER_ACTIVE:env.render()
 
@@ -105,7 +106,8 @@ def play_game(env):
         action = get_action(obs)
 
         obs, reward, done, info = env.step(action)
-        total_reward += reward
+
+        exploration_rate.append(np.count_nonzero(obs)/(obs.shape[0]*obs.shape[1]))
 
         if RENDER_ACTIVE:env.render()
         time.sleep(DELAY)
@@ -113,7 +115,7 @@ def play_game(env):
         if done:
             break
 
-    return total_reward
+    return exploration_rate
 
 
 if __name__ == "__main__":
@@ -121,6 +123,11 @@ if __name__ == "__main__":
 
     env = gym.make('mars_explorer:exploConf-v01', conf=conf)
 
+    data = []
     for game in range(N_GAMES):
         print(f"Running game:{game}")
-        total_reward = play_game(env)
+        # exploration_rate --> percentage of explorated area per time step (array)
+        exploration_rate = play_game(env)
+        data.append(exploration_rate)
+
+    p.dump( data, open("cost_42x42.p","wb"))
