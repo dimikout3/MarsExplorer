@@ -10,10 +10,10 @@ import pickle as p
 
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
-N_GAMES = 30
-N_STEPS = 1000
+N_GAMES = 2
+N_STEPS = 3000
 DELAY = 0.
-RENDER_ACTIVE = False
+RENDER_ACTIVE = True
 CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
 
 
@@ -61,11 +61,28 @@ def find_frontiers(obs):
     return np.array(frontiers)
 
 
+def uniques(distances):
+
+    evaluation = np.zeros(4)
+
+    for cell in distances:
+
+        if np.min(cell)>10:
+            pass
+
+        evaluation[np.argmin(cell)] += 1
+
+    argzeros = np.where(evaluation == 0)[0]
+    evaluation[argzeros] = np.inf
+
+    return evaluation
+
+
 def check_collision(distances, canditate_action, obs):
 
     for index, (x,y) in enumerate(canditate_action):
 
-        if x<0 or y<0 or x>=obs.shape[0] or x>=obs.shape[1]:
+        if x<0 or y<0 or x>=obs.shape[0] or y>=obs.shape[1]:
             distances[index] = np.inf
         elif obs[x,y] == 1.:
             distances[index] = np.inf
@@ -82,7 +99,9 @@ def evaluate(frontiers, obs):
 
     distances = distance.cdist(frontiers, canditate_action)
 
-    evaluation = np.sum(distances, axis=0)
+    evaluation = uniques(distances)
+    # evaluation = np.sum(distances, axis=0)
+
     evaluation = check_collision(evaluation, canditate_action, obs)
     return evaluation
 

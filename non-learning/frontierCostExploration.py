@@ -11,10 +11,10 @@ import pickle as p
 from mars_explorer.envs.settings import DEFAULT_CONFIG as conf
 
 N_GAMES = 30
-N_STEPS = 1000
+N_STEPS = 3000
 DELAY = 0.
 RENDER_ACTIVE = False
-CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
+CONF_PATH = "/home/dkoutras/Documents/IROS2021/84x84/params.json"
 
 
 def get_conf():
@@ -65,7 +65,7 @@ def check_collision(distances, canditate_action, obs):
 
     for index, (x,y) in enumerate(canditate_action):
 
-        if x<0 or y<0 or x>=obs.shape[0] or x>=obs.shape[1]:
+        if x<0 or y<0 or x>=obs.shape[0] or y>=obs.shape[1]:
             distances[index] = np.inf
         elif obs[x,y] == 1.:
             distances[index] = np.inf
@@ -130,4 +130,4 @@ if __name__ == "__main__":
         exploration_rate = play_game(env)
         data.append(exploration_rate)
 
-    p.dump( data, open("cost_42x42.p","wb"))
+    p.dump( data, open("cost_84x84.p","wb"))
