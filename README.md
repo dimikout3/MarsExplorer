@@ -52,3 +52,44 @@ We have included a manual control of the agent, via the corresponding arrow keys
 ```shell
 $ python mars-explorer/tests/manual.py
 ```
+
+# Execution of Experiments
+
+## Deep Reinforcement Learning Approaches
+
+You can train you own agent by using Ray\RLlib formulation. For a more detailed guidance, have a look at our implementation of a PPO agent in a 21-by-21 terrain:
+
+```shell
+$ python trainners/runner.py
+```
+
+You can also test multiple implemantations with different agent (e.g SAC, DQN-Rainbow, A3C) by batch training:
+
+```shell
+$ python trainners/batch.py
+```
+
+By default all of the results, with the saved agents, will be located at:
+
+```shell
+$ ~/ray_results
+```
+
+## Non-Learning Methodologies
+
+In order to provide a comparison with existing and well-established frontier-based approaches, we have included two different implemantation.
+
+<details>
+  <summary><em>Cost-based</em></summary>
+  <p>The next action is chosen based on the distance from the nearest frontier cell.</p>
+</details>
+<details>
+  <summary><em>Utility-based</em></summary>
+  <p>the dicision-making is governed by a frequently updated information potential field</p>
+</details>
+
+Which can be tested by running the corresponding scripts:
+```shell
+$ python non-learning/frontierCostExploration.py.py
+$ python non-learning/frontierUtilityExploration.py.py
+```
