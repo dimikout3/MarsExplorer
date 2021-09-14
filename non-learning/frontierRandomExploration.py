@@ -15,8 +15,7 @@ N_STEPS = 3000
 DELAY = 0.
 EPSILON = 0.65
 RENDER_ACTIVE = False
-CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
-
+CONF_PATH = "params.json"
 
 def get_conf():
 

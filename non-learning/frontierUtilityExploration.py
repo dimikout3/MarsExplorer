@@ -14,7 +14,7 @@ N_GAMES = 2
 N_STEPS = 3000
 DELAY = 0.
 RENDER_ACTIVE = True
-CONF_PATH = "/home/dkoutras/Documents/IROS2021/42x42/params.json"
+CONF_PATH = "params.json"
 
 
 def get_conf():
