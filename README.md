@@ -1,5 +1,7 @@
 # Mars Explorer
 
+<img src="utils/images_repo/GraphicalAbstract.png">
+
 Mars Explorer is an openai-gym compatible environment designed and developed as an initial endeavor to bridge the gap between powerful Deep Reinforcement Learning methodologies and the problem of exploration/coverage of an unknown terrain. For full description and performance analysis, please check out our companion paper [MarsExplorer: Exploration of Unknown Terrains via Deep Reinforcement Learning and Procedurally Generated Environments](https://arxiv.org/abs/2107.09996)
 
 <img src="utils/images_repo/intro.gif">
