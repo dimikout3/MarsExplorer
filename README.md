@@ -1,4 +1,4 @@
-# Mars Explorer
+# MarsExplorer
 
 <img src="utils/images_repo/GraphicalAbstract.png">
 
