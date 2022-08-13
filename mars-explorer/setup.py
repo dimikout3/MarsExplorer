@@ -10,5 +10,6 @@ setup(
         'numpy>=1.19.2',
         'pygame>=2.0.0'
     ],
-    include_package_data=True
+    include_package_data=True,
+    py_modules=[]
 )
